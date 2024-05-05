@@ -18,7 +18,8 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.0",
-        "spatie/laravel-ignition": "^2.0"
+        "spatie/laravel-ignition": "^2.0",
+        "talium_attribute/egooktafanda": "dev-main"
     },
     "autoload": {
         "psr-4": {
@@ -32,6 +33,10 @@
             "Tests\\": "tests/"
         }
     },
+    "repositories": [{
+        "type": "path",
+        "url": "./packages/*"
+    }],
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
