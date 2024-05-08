@@ -9,13 +9,18 @@ use TaliumAttributes\Collection\Rutes\Group;
 use TaliumAttributes\Collection\Rutes\Post;
 
 #[Controllers()]
-#[Group(prefix: 'home')]
+#[Group(prefix: '')]
 class HomeController extends Controller
 {
     #[Get("")]
     public function index()
     {
-        return view('Home');
+        return view('Page.Dashboard.index');
+    }
+    #[Get("testpage")]
+    public function testpage()
+    {
+        return view('Page.TestPage.index');
     }
 
     #[Get("get/{id}")]
