@@ -16,15 +16,50 @@
                         @csrf
                         <!-- Token CSRF -->
                         <div class="col-md-6">
-                            <label for="nama" class="form-label">NAMA BUAH</label>
-                            <input type="text" class="form-control border-start-0" id="nama" name="nama"
+                            <label for="nama_produk" class="form-label">NAMA BUAH</label>
+                            <input type="text" class="form-control border-start-0" id="nama_produk" name="nama_produk"
                                 placeholder="Nama Buah" value="{{ $produk->nama }}" required />
                         </div>
+
                         <div class="col-md-6">
-                            <label for="harga" class="form-label">HARGA</label>
-                            <input type="number" class="form-control border-start-0" id="harga" name="harga"
-                                placeholder="Harga Buah" value="{{ $produk->harga }}" required />
+                            <label for="jenis_produk_id" class="form-label">JENIS PRODUK</label>
+                            <select name="jenis_produk_id" class="form-control">
+                                <option value="">-- Pilih Jenis Produk --</option>
+                                @foreach ($jenisProduk as $jenis)
+                                    <option value="{{ $jenis->id }}"
+                                        {{ $produk->jenis_produk_id == $jenis->id ? 'selected' : '' }}>
+                                        {{ $jenis->nama_jenis_produk }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
+
+                        <div class="col-md-6">
+                            <label for="supplier_id" class="form-label">SUPPLIER</label>
+                            <select name="supplier_id" class="form-control">
+                                <option value="">-- Pilih Supplier --</option>
+                                @foreach ($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}"
+                                        {{ $produk->supplier_id == $supplier->id ? 'selected' : '' }}>
+                                        {{ $supplier->nama_supplier }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="harga_id" class="form-label">HARGA</label>
+                            <select name="harga_id" class="form-control">
+                                <option value="">-- Pilih Harga --</option>
+                                @foreach ($hargas as $harga)
+                                    <option value="{{ $harga->id }}"
+                                        {{ $produk->harga_id == $harga->id ? 'selected' : '' }}>
+                                        {{ $harga->harga_satuan }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <div class="col-12">
                             <label for="stok" class="form-label">STOK</label>
                             <input type="number" class="form-control border-start-0" id="stok" name="stok"

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProdukBuah;
+use App\Models\JenisProduk;
+use App\Models\Supplier;
+use App\Models\Harga;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -29,19 +32,27 @@ class ProdukBuahController extends Controller
     #[Get("tambah")]
     public function formtambah()
     {
-        return view('Page.Produk.tambah');
+        $jenisProduk = JenisProduk::all();
+        $suppliers = Supplier::all();
+        $hargas = Harga::all();
+        
+        return view('Page.Produk.tambah', compact('jenisProduk', 'suppliers', 'hargas'));
     }
 
     #[Get("edit/{id}")]
     public function editForm($id)
     {
         $produk = ProdukBuah::find($id);
-
+    
         if (!$produk) {
             return redirect()->back()->withErrors(['Produk tidak ditemukan.']);
-    }
-
-    return view('Page.Produk.edit', compact('produk'));
+        }
+    
+        $jenisProduk = JenisProduk::all();
+        $suppliers = Supplier::all();
+        $hargas = Harga::all();
+    
+        return view('Page.Produk.edit', compact('produk', 'jenisProduk', 'suppliers', 'hargas'));
     }
 
 
@@ -50,7 +61,9 @@ class ProdukBuahController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
+            'harga_id' => 'required|numeric|min:0',
+            'supplier_id' => 'required|numeric|min:0',
+            'jenis_produk_id' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -70,7 +83,9 @@ class ProdukBuahController extends Controller
     
         $produk = ProdukBuah::create([
             'nama' => $request->nama,
-            'harga' => $request->harga,
+            'harga_id' => $request->harga_id,
+            'jenis_produk_id' => $request->jenis_produk_id,
+            'supplier_id' => $request->supplier_id,
             'stok' => $request->stok,
             'deskripsi' => $request->deskripsi,
             'gambar' => $gambarPath,
@@ -92,7 +107,9 @@ class ProdukBuahController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
+            'harga_id' => 'required|numeric|min:0',
+            'supplier_id' => 'required|numeric|min:0',
+            'jenis_produk_id' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -113,7 +130,9 @@ class ProdukBuahController extends Controller
         }
     
         $produk->nama = $request->nama;
-        $produk->harga = $request->harga;
+        $produk->harga_id = $request->harga_id;
+        $produk->supplier_id = $request->supplier_id;
+        $produk->jenis_produk_id = $request->jenis_produk_id;
         $produk->stok = $request->stok;
         $produk->deskripsi = $request->deskripsi;
     
