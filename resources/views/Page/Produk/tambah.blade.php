@@ -40,15 +40,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="harga_id" class="form-label">HARGA</label>
-                            <select name="harga_id" class="form-control">
-                                <option value="">-- Pilih Harga --</option>
-                                @foreach ($hargas as $harga)
-                                    <option value="{{ $harga->id }}">{{ $harga->harga_satuan }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+
 
                         <div class="col-12">
                             <label for="stok" class="form-label">STOK</label>

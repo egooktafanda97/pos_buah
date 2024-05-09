@@ -2,64 +2,117 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JenisSatuan;
 use Illuminate\Http\Request;
+use App\Models\JenisSatuan;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
+use RealRashid\SweetAlert\Facades\Alert;
+use TaliumAttributes\Collection\Controller\Controllers;
+use TaliumAttributes\Collection\Rutes\Get;
+use TaliumAttributes\Collection\Rutes\Name;
+use TaliumAttributes\Collection\Rutes\Group;
+use TaliumAttributes\Collection\Rutes\Post;
+
+    #[Controllers()]
+    #[Group(prefix: 'satuan')]
 
 class JenisSatuanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    #[Get("")]
     public function index()
     {
-        //
+         $jenissatuan = JenisSatuan::all();
+ 
+        return view('Page.JenisSatuan.index',['jenissatuan' => $jenissatuan]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    
+    
+    #[Get("tambah")]
+    public function formtambah()
     {
-        //
+        return view('Page.JenisSatuan.tambah');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    #[Get("edit/{id}")]
+    public function editForm($id)
+    {
+        $jenissatuan = JenisSatuan::find($id);
+        if (!$jenissatuan) {
+            return redirect()->route('satuan.index')->withErrors(['Jenis Satuan tidak ditemukan.']);
+        }
+        return view('Page.JenisSatuan.edit', compact('jenissatuan'));
+    }
+
+
+    #[Post("tambahdata")]
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_jenis_satuan' => 'required|string|max:255',
+           
+        ]);
+    
+        try {
+            $jenissatuan = JenisSatuan::create([
+                'nama_jenis_satuan' => $request->nama_jenis_satuan,
+               
+            ]);
+    
+            if ($jenissatuan) {
+                Alert::success('Success', 'Jenis Satuan berhasil ditambahkan!');
+                return redirect()->route('satuan.index');
+            } else {
+                throw new \Exception('Gagal menyimpan jenis Satuan.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menambahkan jenis satuan: ' . $e->getMessage())->withErrors(['Gagal menambahkan jenis satuan: ' . $e->getMessage()]);
+        }
     }
+    
+    
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(JenisSatuan $jenisSatuan)
-    {
-        //
-    }
+    #[Post("editdata/{id}")]
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(JenisSatuan $jenisSatuan)
+    public function edit(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nama_jenis_satuan' => 'required|string|max:255',
+          
+        ]);
+    
+        $jenissatuan = JenisSatuan::find($id);
+    
+        if (!$jenissatuan) {
+            return redirect()->route('satuan.index')->withErrors(['Jenis Produk tidak ditemukan.']);
+        }
+    
+        $jenissatuan->nama_jenis_satuan = $request->nama_jenis_satuan;
+      
+    
+        $jenissatuan->save();
+    
+        Alert::success('Success', 'Jenis satuan berhasil diperbarui!');
+        return redirect()->route('satuan.index');
     }
+    
+    
+    #[Get("hapus/{id}")]
+    public function hapus($id)
+        {
+            $jenissatuan = JenisSatuan::find($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, JenisSatuan $jenisSatuan)
-    {
-        //
-    }
+            if (!$jenissatuan) {
+                return Redirect::back()->withErrors(['Jenis Satuan tidak ditemukan.']);
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(JenisSatuan $jenisSatuan)
-    {
-        //
-    }
+       
+
+            // Hapus data produk dari database
+            $jenissatuan->delete();
+
+            Alert::success('Success', 'Jenis Satuan berhasil dihapus!');
+            return redirect()->back();
+        }
+    
+    
 }

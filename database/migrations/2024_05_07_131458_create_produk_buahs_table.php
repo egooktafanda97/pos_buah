@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('gambar');
             $table->unsignedBigInteger('jenis_produk_id');
             $table->unsignedBigInteger('supplier_id');
-            $table->unsignedBigInteger('harga_id');
             $table->integer('stok');
             $table->timestamps();
         });

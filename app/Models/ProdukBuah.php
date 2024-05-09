@@ -14,7 +14,6 @@ class ProdukBuah extends Model
         'gambar',
         'jenis_produk_id',
         'supplier_id',
-        'harga_id',
         'stok'
     ];
 

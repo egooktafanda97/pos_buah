@@ -31,7 +31,8 @@
                             <thead>
                                 <tr>
                                     <th>NAMA</th>
-                                    <th>HARGA</th>
+                                    <th>JENIS</th>
+                                    <th>SUPPLIER</th>
                                     <th>STOK</th>
                                     <th>DESKRIPSI</th>
                                     <th>GAMBAR</th>
@@ -41,8 +42,9 @@
                             <tbody>
                                 @foreach ($produkbuah as $key => $produk)
                                     <tr>
-                                        <td>{{ $produk->nama }}</td>
-                                        <td>Rp {{ number_format($produk->harga) }}</td>
+                                        <td>{{ $produk->nama_produk }}</td>
+                                        <td>{{ $produk->jenisProduk->nama_jenis_produk }}</td>
+                                        <td>{{ $produk->supplier->nama_supplier }}</td>
                                         <td>{{ $produk->stok }}</td>
                                         <td>{{ $produk->deskripsi }}</td>
                                         <td>
@@ -92,7 +94,8 @@
                             <tfoot>
                                 <tr>
                                     <th>NAMA</th>
-                                    <th>HARGA</th>
+                                    <th>JENIS</th>
+                                    <th>SUPPLIER</th>
                                     <th>STOK</th>
                                     <th>DESKRIPSI</th>
                                     <th>GAMBAR</th>

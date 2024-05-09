@@ -25,10 +25,7 @@
     <link rel="stylesheet" href="{{ asset('admin') }}/assets/css/dark-theme.css" />
     <link rel="stylesheet" href="{{ asset('admin') }}/assets/css/semi-dark.css" />
     <link rel="stylesheet" href="{{ asset('admin') }}/assets/css/header-colors.css" />
-    {{-- FILE UPLOAD --}}
-    <link href="{{ asset('admin') }}/assets/plugins/fancy-file-uploader/fancy_fileupload.css" rel="stylesheet" />
-    <link href="{{ asset('admin') }}/assets/plugins/Drag-And-Drop/dist/imageuploadify.min.css" rel="stylesheet" />
-    {{-- FILE UPLOAD --}}
+
 
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     @yield('style')
@@ -119,26 +116,7 @@
     <!--app JS-->
     <script src="{{ asset('admin') }}/assets/js/app.js"></script>
 
-    {{-- FILE UPLOAD --}}
-    <script src="{{ asset('admin') }}/assets/plugins/fancy-file-uploader/jquery.ui.widget.js"></script>
-    <script src="{{ asset('admin') }}/assets/plugins/fancy-file-uploader/jquery.fileupload.js"></script>
-    <script src="{{ asset('admin') }}/assets/plugins/fancy-file-uploader/jquery.iframe-transport.js"></script>
-    <script src="{{ asset('admin') }}/assets/plugins/fancy-file-uploader/jquery.fancy-fileupload.js"></script>
-    <script src="{{ asset('admin') }}/assets/plugins/Drag-And-Drop/dist/imageuploadify.min.js"></script>
-    <script>
-        $('#fancy-file-upload').FancyFileUpload({
-            params: {
-                action: 'fileuploader'
-            },
-            maxfilesize: 1000000
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#image-uploadify').imageuploadify();
-        })
-    </script>
-    {{-- FILE UPLOAD --}}
+
 </body>
 
 </html>
