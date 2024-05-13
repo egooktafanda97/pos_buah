@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="{{ asset('admin') }}/assets/css/dark-theme.css" />
     <link rel="stylesheet" href="{{ asset('admin') }}/assets/css/semi-dark.css" />
     <link rel="stylesheet" href="{{ asset('admin') }}/assets/css/header-colors.css" />
+    {{-- UPLOAD --}}
+    <link href="{{ asset('admin') }}/assets/plugins/Drag-And-Drop/dist/imageuploadify.min.css" rel="stylesheet" />
 
 
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
@@ -70,6 +72,7 @@
                                     class='bx bx-x'></i></span>
                         </div>
                     </div>
+
                 </nav>
             </div>
         </header>
@@ -115,6 +118,14 @@
     <script src="{{ asset('admin') }}/assets/js/index.js"></script>
     <!--app JS-->
     <script src="{{ asset('admin') }}/assets/js/app.js"></script>
+
+    {{-- UPLOAD --}}
+    <script src="{{ asset('admin') }}/assets/plugins/Drag-And-Drop/dist/imageuploadify.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#image-uploadify').imageuploadify();
+        })
+    </script>
 
 
 </body>

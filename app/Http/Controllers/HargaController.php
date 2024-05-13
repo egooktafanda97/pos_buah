@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Harga;
-use App\Models\ProdukBuah;
+use App\Models\Produk;
 use App\Models\JenisSatuan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
@@ -16,7 +16,7 @@ use TaliumAttributes\Collection\Rutes\Group;
 use TaliumAttributes\Collection\Rutes\Post;
 
     #[Controllers()]
-    #[Group(prefix: 'harga')]
+    #[Group(prefix: 'harga',middleware:['role:SUPER-ADMIN'])]
 
 class HargaController extends Controller
 {
@@ -32,7 +32,7 @@ class HargaController extends Controller
     #[Get("tambah")]
     public function formtambah()
     {
-        $produk = ProdukBuah::all();
+        $produk = Produk::all();
         $satuan = JenisSatuan::all();
         
         return view('Page.Harga.tambah', compact('produk', 'satuan'));
@@ -47,7 +47,7 @@ class HargaController extends Controller
             return redirect()->back()->withErrors(['Harga tidak ditemukan.']);
         }
     
-        $produk = ProdukBuah::all();
+        $produk = Produk::all();
         $satuan = JenisSatuan::all();
     
         return view('Page.Harga.edit', compact('harga','produk', 'satuan'));

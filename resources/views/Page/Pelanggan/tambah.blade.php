@@ -31,8 +31,10 @@
                                 name="nomor_telepon_pelanggan" placeholder="No Hp Pelanggan" required />
                         </div>
 
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-success px-5 float-right">TAMBAH DATA</button>
+                        <div class="w-100 border-top"></div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-outline-success"><i class='bx bx-save me-0'></i>
+                            </button>
                         </div>
                     </form>
                 </div>

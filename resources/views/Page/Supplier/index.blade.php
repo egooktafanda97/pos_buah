@@ -44,9 +44,9 @@
                                         <td>{{ $supplier->nomor_telepon_supplier }}</td>
                                         <td>
                                             <a href="{{ url('supplier/edit', ['id' => $supplier->id]) }}"
-                                                class="btn btn-primary">Edit</a>
-                                            <button class="btn btn-danger btn-delete"
-                                                data-id="{{ $supplier->id }}">Hapus</button>
+                                                class="btn btn-sm btn-primary"><i class='bx bx-pencil'></i></a>
+                                            <button class="btn btn-sm btn-danger btn-delete"
+                                                data-id="{{ $supplier->id }}"><i class='bx bx-trash'></i></button>
                                             <form id="delete-form-{{ $supplier->id }}"
                                                 action="{{ url('supplier/hapus', ['id' => $supplier->id]) }}" method="GET"
                                                 style="display: none;">

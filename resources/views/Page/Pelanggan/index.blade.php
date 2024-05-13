@@ -44,9 +44,9 @@
                                         <td>{{ $pelanggan->nomor_telepon_pelanggan }}</td>
                                         <td>
                                             <a href="{{ url('pelanggan/edit', ['id' => $pelanggan->id]) }}"
-                                                class="btn btn-primary">Edit</a>
-                                            <button class="btn btn-danger btn-delete"
-                                                data-id="{{ $pelanggan->id }}">Hapus</button>
+                                                class="btn btn-sm btn-primary"><i class='bx bx-pencil'></i></a>
+                                            <button class="btn btn-sm btn-danger btn-delete"
+                                                data-id="{{ $pelanggan->id }}"><i class='bx bx-trash'></i></button>
                                             <form id="delete-form-{{ $pelanggan->id }}"
                                                 action="{{ url('pelanggan/hapus', ['id' => $pelanggan->id]) }}"
                                                 method="GET" style="display: none;">

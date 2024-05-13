@@ -7,9 +7,10 @@ use TaliumAttributes\Collection\Controller\Controllers;
 use TaliumAttributes\Collection\Rutes\Get;
 use TaliumAttributes\Collection\Rutes\Group;
 use TaliumAttributes\Collection\Rutes\Post;
+use TaliumAttributes\Collection\Rutes\Middleware;
 
 #[Controllers()]
-#[Group(prefix: '')]
+#[Group(prefix: 'home',middleware:['role:SUPER-ADMIN'])]
 class HomeController extends Controller
 {
     #[Get("")]

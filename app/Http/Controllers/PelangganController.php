@@ -14,7 +14,7 @@ use TaliumAttributes\Collection\Rutes\Group;
 use TaliumAttributes\Collection\Rutes\Post;
 
     #[Controllers()]
-    #[Group(prefix: 'pelanggan')]
+    #[Group(prefix: 'pelanggan',middleware:['role:SUPER-ADMIN'])]
 
 class PelangganController extends Controller
 {

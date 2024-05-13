@@ -42,9 +42,9 @@
 
                                         <td>
                                             <a href="{{ url('satuan/edit', ['id' => $jenissatuan->id]) }}"
-                                                class="btn btn-primary">Edit</a>
-                                            <button class="btn btn-danger btn-delete"
-                                                data-id="{{ $jenissatuan->id }}">Hapus</button>
+                                                class="btn btn-sm btn-primary"><i class='bx bx-pencil'></i></a>
+                                            <button class="btn btn-sm btn-danger btn-delete"
+                                                data-id="{{ $jenissatuan->id }}"><i class='bx bx-trash'></i></button>
                                             <form id="delete-form-{{ $jenissatuan->id }}"
                                                 action="{{ url('satuan/hapus', ['id' => $jenissatuan->id]) }}"
                                                 method="GET" style="display: none;">
