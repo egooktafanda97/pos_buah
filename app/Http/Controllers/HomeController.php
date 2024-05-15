@@ -10,7 +10,7 @@ use TaliumAttributes\Collection\Rutes\Name;
 use TaliumAttributes\Collection\Rutes\Post;
 
 #[Controllers()]
-#[Group(prefix: 'home', middleware: 'web')]
+#[Group(prefix: 'home', middleware: ['web'])]
 class HomeController extends Controller
 {
     #[Get("")]

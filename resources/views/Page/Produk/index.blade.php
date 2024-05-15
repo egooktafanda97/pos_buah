@@ -10,13 +10,13 @@
                         <ol class="breadcrumb mb-0 p-0">
                             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Data Produk</li>
+                            <li aria-current="page" class="breadcrumb-item active">Data Produk</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="ms-auto">
                     <div class="btn-group">
-                        <a href="/produk/tambah" class="btn btn-success"><i class='bx bx-plus-circle'></i> TAMBAH
+                        <a class="btn btn-success" href="/produk/tambah"><i class='bx bx-plus-circle'></i> TAMBAH
                             DATA</a>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+                        <table class="table table-striped table-bordered" id="example" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>NAMA</th>
@@ -44,46 +44,46 @@
                                     <tr>
                                         <td>{{ $produk->nama_produk }}</td>
                                         <td>{{ $produk->jenisProduk->nama_jenis_produk }}</td>
-                                        <td>{{ $produk->supplier->nama_supplier }}</td>
+                                        <td>{{ $produk->supplier->nama_supplier ?? '' }}</td>
                                         <td>{{ $produk->stok }}</td>
                                         <td>{{ $produk->deskripsi }}</td>
                                         <td>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal{{ $key }}">
+                                            <button class="btn btn-primary btn-sm"
+                                                data-bs-target="#exampleModal{{ $key }}" data-bs-toggle="modal"
+                                                type="button">
                                                 Tampilkan Gambar
                                             </button>
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal{{ $key }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel{{ $key }}" aria-hidden="true">
+                                            <div aria-hidden="true" aria-labelledby="exampleModalLabel{{ $key }}"
+                                                class="modal fade" id="exampleModal{{ $key }}" tabindex="-1">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title"
                                                                 id="exampleModalLabel{{ $key }}">Gambar Produk:
                                                                 {{ $produk->nama }}</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
+                                                            <button aria-label="Close" class="btn-close"
+                                                                data-bs-dismiss="modal" type="button"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <img src="{{ asset($produk->gambar) }}" class="img-fluid"
-                                                                alt="{{ $produk->nama }}">
+                                                            <img alt="{{ $produk->nama }}" class="img-fluid"
+                                                                src="{{ asset($produk->gambar) }}">
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Tutup</button>
+                                                            <button class="btn btn-secondary" data-bs-dismiss="modal"
+                                                                type="button">Tutup</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <a href="{{ url('produk/edit', ['id' => $produk->id]) }}"
-                                                class="btn btn-primary">Edit</a>
-                                            <button class="btn btn-danger btn-delete"
+                                            <a class="btn btn-primary btn-sm"
+                                                href="{{ url('produk/edit', ['id' => $produk->id]) }}">Edit</a>
+                                            <button class="btn btn-danger btn-delete btn-sm"
                                                 data-id="{{ $produk->id }}">Hapus</button>
-                                            <form id="delete-form-{{ $produk->id }}"
-                                                action="{{ url('produk/hapus', ['id' => $produk->id]) }}" method="GET"
-                                                style="display: none;">
+                                            <form action="{{ url('produk/hapus', ['id' => $produk->id]) }}"
+                                                id="delete-form-{{ $produk->id }}" method="GET" style="display: none;">
                                                 @csrf
                                             </form>
                                         </td>
