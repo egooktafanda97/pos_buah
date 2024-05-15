@@ -14,6 +14,6 @@ class JenisProduk extends Model
 
     public function produks()
     {
-        return $this->hasMany(ProdukBuah::class, 'jenis_produk_id');
+        return $this->hasMany(Produk::class, 'jenis_produk_id');
     }
 }

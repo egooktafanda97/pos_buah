@@ -25,6 +25,6 @@ class Transaksi extends Model
 
     public function produks()
     {
-        return $this->belongsToMany(ProdukBuah::class, 'detail_transaksis', 'transaksi_id', 'produk_id')->withPivot('jumlah', 'harga_satuan')->withTimestamps();
+        return $this->belongsToMany(Produk::class, 'detail_transaksis', 'transaksi_id', 'produk_id')->withPivot('jumlah', 'harga_satuan')->withTimestamps();
     }
 }

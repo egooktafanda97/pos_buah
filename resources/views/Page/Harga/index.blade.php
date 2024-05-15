@@ -47,9 +47,9 @@
 
                                         <td>
                                             <a href="{{ url('harga/edit', ['id' => $harga->id]) }}"
-                                                class="btn btn-primary">Edit</a>
-                                            <button class="btn btn-danger btn-delete"
-                                                data-id="{{ $harga->id }}">Hapus</button>
+                                                class="btn btn-sm btn-primary"><i class='bx bx-pencil'></i></a>
+                                            <button class="btn btn-sm btn-danger btn-delete"
+                                                data-id="{{ $harga->id }}"><i class='bx bx-trash'></i></button>
                                             <form id="delete-form-{{ $harga->id }}"
                                                 action="{{ url('harga/hapus', ['id' => $harga->id]) }}" method="GET"
                                                 style="display: none;">

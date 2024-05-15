@@ -50,4 +50,12 @@
             <div class="menu-title">HARGA</div>
         </a>
     </li>
+    <li class="menu-label">AUTH</li>
+    <li>
+        <a href="/logout">
+            <div class="parent-icon"><i class='bx bx-power-off'></i>
+            </div>
+            <div class="menu-title">LOGOUT</div>
+        </a>
+    </li>
 </ul>

@@ -40,7 +40,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($produkbuah as $key => $produk)
+                                @foreach ($produk as $key => $produk)
                                     <tr>
                                         <td>{{ $produk->nama_produk }}</td>
                                         <td>{{ $produk->jenisProduk->nama_jenis_produk }}</td>
@@ -48,10 +48,16 @@
                                         <td>{{ $produk->stok }}</td>
                                         <td>{{ $produk->deskripsi }}</td>
                                         <td>
+<<<<<<< HEAD
                                             <button class="btn btn-primary btn-sm"
                                                 data-bs-target="#exampleModal{{ $key }}" data-bs-toggle="modal"
                                                 type="button">
                                                 Tampilkan Gambar
+=======
+                                            <button type="button" class="btn btn-sm btn-outline-primary  px-5"
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal{{ $key }}">
+                                                <i class='bx bx-bullseye mr-1'></i>Lihat Gambar
+>>>>>>> ad04bf1903b2fb659e63e69353d6d034112cd6ff
                                             </button>
                                             <!-- Modal -->
                                             <div aria-hidden="true" aria-labelledby="exampleModalLabel{{ $key }}"
@@ -78,12 +84,22 @@
                                             </div>
                                         </td>
                                         <td>
+<<<<<<< HEAD
                                             <a class="btn btn-primary btn-sm"
                                                 href="{{ url('produk/edit', ['id' => $produk->id]) }}">Edit</a>
                                             <button class="btn btn-danger btn-delete btn-sm"
                                                 data-id="{{ $produk->id }}">Hapus</button>
                                             <form action="{{ url('produk/hapus', ['id' => $produk->id]) }}"
                                                 id="delete-form-{{ $produk->id }}" method="GET" style="display: none;">
+=======
+                                            <a href="{{ url('produk/edit', ['id' => $produk->id]) }}"
+                                                class="btn btn-sm btn-primary"><i class='bx bx-pencil'></i></a>
+                                            <button class="btn btn-sm btn-danger btn-delete"
+                                                data-id="{{ $produk->id }}"><i class='bx bx-trash'></i></button>
+                                            <form id="delete-form-{{ $produk->id }}"
+                                                action="{{ url('produk/hapus', ['id' => $produk->id]) }}" method="GET"
+                                                style="display: none;">
+>>>>>>> ad04bf1903b2fb659e63e69353d6d034112cd6ff
                                                 @csrf
                                             </form>
                                         </td>

@@ -8,6 +8,7 @@ use TaliumAttributes\Collection\Rutes\Get;
 use TaliumAttributes\Collection\Rutes\Group;
 use TaliumAttributes\Collection\Rutes\Name;
 use TaliumAttributes\Collection\Rutes\Post;
+use TaliumAttributes\Collection\Rutes\Middleware;
 
 #[Controllers()]
 #[Group(prefix: 'home', middleware: ['web'])]
