@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Supplier;
+use App\Models\Toko;
 
 class SupplierSeed extends Seeder
 {
@@ -14,10 +15,10 @@ class SupplierSeed extends Seeder
     public function run(): void
     {
         Supplier::create([
-            'nama_sipplier' => 'Yovi Ardiansyah',
-            'alamat_sipplier' => 'Pangean',
-            'nomor_telepon_sipplier' => '08632637626372',
-          
+            "toko_id" => Toko::first()->id,
+            'nama_supplier' => 'Yovi Ardiansyah',
+            'alamat_supplier' => 'Pangean',
+            'nomor_telepon_supplier' => '08632637626372',
         ]);
     }
 }

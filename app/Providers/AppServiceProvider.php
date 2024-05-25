@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contract\AttributesFeature\Handler\ExtractAttributes;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +12,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton('tag', function ($app) {
+            return new \App\Dtos\AttributeContainers((new ExtractAttributes()));
+        });
     }
 
     /**
@@ -19,6 +22,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 }

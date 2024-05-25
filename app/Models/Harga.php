@@ -8,15 +8,35 @@ use Illuminate\Database\Eloquent\Model;
 class Harga extends Model
 {
     use HasFactory;
+    protected $table = 'harga';
+
     protected $fillable = [
-        'produk_id',
+        'user_id',
+        'toko_id',
+        'produks_id',
+        'harga',
         'jenis_satuan_id',
-        'harga_satuan'
+        'user_update_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function userUpdate()
+    {
+        return $this->belongsTo(User::class, 'user_update_id');
+    }
+
+    public function toko()
+    {
+        return $this->belongsTo(Toko::class, 'toko_id');
+    }
 
     public function produk()
     {
-        return $this->belongsTo(Produk::class, 'produk_id');
+        return $this->belongsTo(Produk::class, 'produks_id');
     }
 
     public function jenisSatuan()

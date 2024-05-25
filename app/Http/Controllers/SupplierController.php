@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Supplier;
+use App\Services\ActorService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -13,20 +14,25 @@ use TaliumAttributes\Collection\Rutes\Name;
 use TaliumAttributes\Collection\Rutes\Group;
 use TaliumAttributes\Collection\Rutes\Post;
 
-    #[Controllers()]
-    #[Group(prefix: 'supplier',middleware:['role:SUPER-ADMIN'])]
+#[Controllers()]
+#[Group(prefix: 'supplier', middleware: ['role:SUPER-ADMIN'])]
 
 class SupplierController extends Controller
 {
+    public function __construct(
+        public ActorService $actorService
+    ) {
+    }
+
     #[Get("")]
     public function index()
     {
-         $supplier = Supplier::all();
- 
-        return view('Page.Supplier.index',['supplier' => $supplier]);
+        $supplier = Supplier::all();
+
+        return view('Page.Supplier.index', ['supplier' => $supplier]);
     }
-    
-    
+
+
     #[Get("tambah")]
     public function formtambah()
     {
@@ -52,14 +58,15 @@ class SupplierController extends Controller
             'alamat_supplier' => 'required|string|max:255',
             'nomor_telepon_supplier' => 'required|string|max:255',
         ]);
-    
+
         try {
             $supplier = Supplier::create([
+                'toko_id' => $this->actorService->toko()->id,
                 'nama_supplier' => $request->nama_supplier,
                 'alamat_supplier' => $request->alamat_supplier,
                 'nomor_telepon_supplier' => $request->nomor_telepon_supplier,
             ]);
-    
+
             if ($supplier) {
                 Alert::success('Success', 'Supplier berhasil ditambahkan!');
                 return redirect()->route('supplier.index');
@@ -70,8 +77,8 @@ class SupplierController extends Controller
             return redirect()->back()->with('error', 'Gagal menambahkan supplier: ' . $e->getMessage())->withErrors(['Gagal menambahkan supplier: ' . $e->getMessage()]);
         }
     }
-    
-    
+
+
 
     #[Post("editdata/{id}")]
 
@@ -82,41 +89,39 @@ class SupplierController extends Controller
             'alamat_supplier' => 'required|string|max:255',
             'nomor_telepon_supplier' => 'required|string|max:255',
         ]);
-    
+
         $supplier = Supplier::find($id);
-    
+
         if (!$supplier) {
             return redirect()->route('supplier.index')->withErrors(['Supplier tidak ditemukan.']);
         }
-    
+
         $supplier->nama_supplier = $request->nama_supplier;
         $supplier->alamat_supplier = $request->alamat_supplier;
         $supplier->nomor_telepon_supplier = $request->nomor_telepon_supplier;
-    
+
         $supplier->save();
-    
+
         Alert::success('Success', 'Supplier berhasil diperbarui!');
         return redirect()->route('supplier.index');
     }
-    
-    
+
+
     #[Get("hapus/{id}")]
     public function hapus($id)
-        {
-            $supplier = Supplier::find($id);
+    {
+        $supplier = Supplier::find($id);
 
-            if (!$supplier) {
-                return Redirect::back()->withErrors(['Supplier tidak ditemukan.']);
-            }
-
-       
-
-            // Hapus data produk dari database
-            $supplier->delete();
-
-            Alert::success('Success', 'Supplier berhasil dihapus!');
-            return redirect()->back();
+        if (!$supplier) {
+            return Redirect::back()->withErrors(['Supplier tidak ditemukan.']);
         }
-    
-    
+
+
+
+        // Hapus data produk dari database
+        $supplier->delete();
+
+        Alert::success('Success', 'Supplier berhasil dihapus!');
+        return redirect()->back();
+    }
 }

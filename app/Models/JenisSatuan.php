@@ -8,12 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class JenisSatuan extends Model
 {
     use HasFactory;
+    protected $table = "jenis_satuans";
     protected $fillable = [
-        'nama_jenis_satuan'
+        'toko_id',
+        'nama'
     ];
 
     public function hargas()
     {
         return $this->hasMany(Harga::class, 'jenis_satuan_id');
+    }
+
+    public function toko()
+    {
+        return $this->belongsTo(Toko::class);
     }
 }

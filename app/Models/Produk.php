@@ -8,14 +8,37 @@ use Illuminate\Database\Eloquent\Model;
 class Produk extends Model
 {
     use HasFactory;
+    // Table name
+    protected $table = 'produks';
+
+    // Primary key
+    protected $primaryKey = 'id';
+
+    // Fillable fields
     protected $fillable = [
+        'toko_id',
+        'user_id',
         'nama_produk',
         'deskripsi',
         'gambar',
         'jenis_produk_id',
         'supplier_id',
-        'stok'
+        'barcode',
+        'rak_id',
+        'satuan_jual_terkecil_id',
+        'status_id',
     ];
+
+    // Relations
+    public function toko()
+    {
+        return $this->belongsTo(Toko::class, 'toko_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function jenisProduk()
     {
@@ -27,13 +50,23 @@ class Produk extends Model
         return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
-    public function harga()
+    public function rak()
     {
-        return $this->belongsTo(Harga::class, 'harga_id');
+        return $this->belongsTo(Rak::class, 'rak_id');
     }
 
-    public function transaksi()
+    public function status()
     {
-        return $this->belongsToMany(Transaksi::class, 'detail_transaksi', 'produk_id', 'transaksi_id')->withPivot('jumlah', 'harga_satuan')->withTimestamps();
+        return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function harga()
+    {
+        return $this->hasMany(Harga::class, 'produks_id');
+    }
+
+    public function stok()
+    {
+        return $this->belongsTo(Stok::class, 'id', 'produks_id');
     }
 }

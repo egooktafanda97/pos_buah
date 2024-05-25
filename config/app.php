@@ -187,6 +187,7 @@ return [
          */
 
         TaliumAttributes\Provider\TaliumAttributesServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
         /*
          * Application Service Providers...
          */

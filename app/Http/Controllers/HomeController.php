@@ -6,12 +6,11 @@ use Illuminate\Http\Request;
 use TaliumAttributes\Collection\Controller\Controllers;
 use TaliumAttributes\Collection\Rutes\Get;
 use TaliumAttributes\Collection\Rutes\Group;
-use TaliumAttributes\Collection\Rutes\Name;
 use TaliumAttributes\Collection\Rutes\Post;
 use TaliumAttributes\Collection\Rutes\Middleware;
 
 #[Controllers()]
-#[Group(prefix: 'home', middleware: ['web'])]
+#[Group(prefix: 'home', middleware: ['role:SUPER-ADMIN'])]
 class HomeController extends Controller
 {
     #[Get("")]

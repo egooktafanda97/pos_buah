@@ -4,9 +4,9 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <!--favicon-->
-    <link rel="icon" href="{{ asset('admin') }}/assets/images/favicon-32x32.png" type="image/png" />
+    <link href="{{ asset('admin') }}/assets/images/favicon-32x32.png" rel="icon" type="image/png" />
     <!--plugins-->
     <link href="{{ asset('admin') }}/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
     <link href="{{ asset('admin') }}/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
@@ -22,16 +22,16 @@
     <link href="{{ asset('admin') }}/assets/css/app.css" rel="stylesheet">
     <link href="{{ asset('admin') }}/assets/css/icons.css" rel="stylesheet">
     <!-- Theme Style CSS -->
-    <link rel="stylesheet" href="{{ asset('admin') }}/assets/css/dark-theme.css" />
-    <link rel="stylesheet" href="{{ asset('admin') }}/assets/css/semi-dark.css" />
-    <link rel="stylesheet" href="{{ asset('admin') }}/assets/css/header-colors.css" />
+    <link href="{{ asset('admin') }}/assets/css/dark-theme.css" rel="stylesheet" />
+    <link href="{{ asset('admin') }}/assets/css/semi-dark.css" rel="stylesheet" />
+    <link href="{{ asset('admin') }}/assets/css/header-colors.css" rel="stylesheet" />
     {{-- UPLOAD --}}
     <link href="{{ asset('admin') }}/assets/plugins/Drag-And-Drop/dist/imageuploadify.min.css" rel="stylesheet" />
 
 
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     @yield('style')
-
+    @stack('style')
     <title>POINT OF SALES - FRUIT STORE</title>
 </head>
 
@@ -42,8 +42,8 @@
         <div class="sidebar-wrapper" data-simplebar="true">
             <div class="sidebar-header">
                 <div>
-                    <img src="https://icon-library.com/images/point-of-sales-icon/point-of-sales-icon-9.jpg"
-                        class="logo-icon" alt="logo icon">
+                    <img alt="logo icon" class="logo-icon"
+                        src="https://icon-library.com/images/point-of-sales-icon/point-of-sales-icon-9.jpg">
                 </div>
                 <div>
                     {{-- <h4 class="logo-text">P O S</h4> --}}
@@ -65,7 +65,7 @@
                     </div>
                     <div class="search-bar flex-grow-1">
                         <div class="position-relative search-bar-box">
-                            <input type="text" class="form-control search-control" placeholder="Type to search...">
+                            <input class="form-control search-control" placeholder="Type to search..." type="text">
                             <span class="position-absolute top-50 search-show translate-middle-y"><i
                                     class='bx bx-search'></i></span>
                             <span class="position-absolute top-50 search-close translate-middle-y"><i
@@ -85,7 +85,7 @@
         <div class="overlay toggle-icon"></div>
         <!--end overlay-->
         <!--Start Back To Top Button-->
-        <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+        <a class="back-to-top" href="javaScript:;"><i class='bx bxs-up-arrow-alt'></i></a>
         <!--End Back To Top Button-->
         <footer class="page-footer">
             <?php
@@ -126,6 +126,7 @@
             $('#image-uploadify').imageuploadify();
         })
     </script>
+    @stack('script')
 
 
 </body>

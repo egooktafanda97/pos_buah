@@ -42,11 +42,13 @@ class RouterHandler
 
     public static function build($data): array
     {
+
         $routers = [];
         // Cek apakah kelas memiliki atribut dan jika memiliki kunci 'prefix'
         if (!empty($data['attribute'])) {
             // Iterasi setiap metode
             foreach ($data['methods'] as $method) {
+
                 // Ambil informasi tentang metode
                 $methodName = $method['method_name'];
                 $attributes = $method['attributes'];
@@ -78,7 +80,7 @@ class RouterHandler
                     $router['prefix'] = $data['attribute']['prefix'] ?? $data['attribute']['group']->prefix ?? '';
                     $router['url'] = $url_method;
                     $router['controller'] = [$data['class'], $methodName];
-
+                    $router['guard'] = $attributes['guard'] ?? null;
                     // group
 
                     if (!empty($data['attribute']['group'])) {
@@ -97,9 +99,17 @@ class RouterHandler
                         $router['middleware'] = $data['attribute']['middleware'];
                     }
 
+                    if (!empty($data['attribute']['group']->name)) {
+                        $router['name'] = $data['attribute']['group']->name;
+                    }
+
                     // Tambahkan middleware ke router jika ada
                     if (!empty($data['attribute']['name'])) {
                         $router['name'] = $data['attribute']['name'];
+                    }
+
+                    if (!empty($data['attribute']['guard'])) {
+                        $router['name'] = $data['attribute']['guard'];
                     }
 
                     if (!empty($attributes['name'])) {
@@ -141,18 +151,19 @@ class RouterHandler
                 if (!empty($routes['attribute'])) {
                     $arr = self::build((ReflectionMeta::HirarchyAttributes($item)));
                     foreach ($arr as $router) {
-                        $routes_list[] = array_merge($router, ["http-contex" => $key ?? 'web']);
+                        $routes_list[] = array_merge($router, ["http-contex" => $router['guard'] ?? $key ?? 'web']);
                     }
                 }
             }
         }
-
         foreach ($routes_list as $router) {
-
             try {
 
-                Route::group($router['http-contex'] === "api" ? ["middleware" => "api", "prefix" => "api"] : ["middleware" => "web"], function () use ($router) {
-                    Route::group($router['attribute_group'] ?? [], function () use ($router) {
+                Route::group([], function () use ($router) {
+                    $groups = collect($router['attribute_group'])
+                        ->merge($router['http-contex'] === "api" ? ["middleware" => "api", "prefix" => "api/" . ($router['attribute_group']['prefix'] ?? '')] : ["middleware" => "web"])
+                        ->toArray();
+                    Route::group($groups ?? [], function () use ($router) {
                         if (is_array($router['url'])) {
                             foreach ($router['url'] as $url) {
                                 Route::group($router['method_group'] ?? [], function () use ($url, $router) {
@@ -161,7 +172,6 @@ class RouterHandler
                                 });
                             }
                         } else {
-
                             Route::group($router['method_group'] ?? [], function () use ($router) {
                                 Route::{strtolower($router['method'])}($router['url'], $router['controller'])
                                     ->name($router['name'] ?? null);

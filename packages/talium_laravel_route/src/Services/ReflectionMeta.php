@@ -138,6 +138,18 @@ class ReflectionMeta
                 $methodData['attributes']['name'] = $name;
             }
 
+            $guardAttr = $method->getAttributes(Controllers::class);
+            if (!empty($guardAttr)) {
+                $name = $guardAttr[0]->newInstance()->controller;
+                $methodData['attributes']['guard'] = $name;
+            }
+
+            $guardAttr = $method->getAttributes(RestController::class);
+            if (!empty($guardAttr)) {
+                $name = $guardAttr[0]->newInstance()->controller;
+                $methodData['attributes']['guard'] = $name;
+            }
+
             // Mendapatkan atribut Name dari metode jika ada
             $nameAttribute = $method->getAttributes(Name::class);
             if (!empty($nameAttribute)) {

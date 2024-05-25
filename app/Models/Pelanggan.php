@@ -9,6 +9,7 @@ class Pelanggan extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'toko_id',
         'nama_pelanggan',
         'alamat_pelanggan',
         'nomor_telepon_pelanggan'
@@ -17,5 +18,9 @@ class Pelanggan extends Model
     public function transaksis()
     {
         return $this->hasMany(Transaksi::class, 'pelanggan_id');
+    }
+    public function toko()
+    {
+        return $this->belongsTo(Toko::class);
     }
 }
