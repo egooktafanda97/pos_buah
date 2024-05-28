@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Services\ActorService;
 use App\Services\TokoService;
+use App\Models\Toko;
+use Illuminate\Support\Facades\Log;
 use App\Services\UploadedService;
 use Illuminate\Http\Request;
 use TaliumAttributes\Collection\Controller\Controllers;
 use TaliumAttributes\Collection\Rutes\Get;
 use TaliumAttributes\Collection\Rutes\Name;
 use TaliumAttributes\Collection\Rutes\Group;
+use TaliumAttributes\Collection\Rutes\Delete;
 use TaliumAttributes\Collection\Rutes\Post;
+use TaliumAttributes\Collection\Rutes\Put;
 
 #[Controllers()]
 #[Group(prefix: 'toko', middleware: ['auth'])]
@@ -69,7 +73,7 @@ class TokoController extends Controller
         }
     }
 
-    #[Post("editdata/{id}")]
+    #[Put("editdata/{id}")]
     public function update(UploadedService $uploadedService, Request $request, $id)
     {
         try {
@@ -89,16 +93,34 @@ class TokoController extends Controller
         }
     }
 
-    #[Post("destory/{id}")]
+    #[Delete("destroy/{id}")]
     public function destroy($id)
     {
         try {
-            $toko = $this->tokoService->delete($id);
-            if (!$toko)
-                throw new \Exception('Toko gagal dihapus.');
-            return redirect()->route('toko.index')->with('success', 'Toko berhasil dihapus.');
+            // Attempt to find the Toko record
+            $toko = Toko::findOrFail($id);
+    
+            // Attempt to find the associated User record
+            $user = $toko->user;
+    
+            // Attempt to delete the Toko record
+            $toko->delete();
+    
+            // Attempt to delete the associated User record if it exists
+            if ($user) {
+                $user->delete();
+            }
+    
+            // Redirect back to the index with a success message
+            return redirect()->route('toko.index')->with('success', 'Toko dan pengguna terkait berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('toko.index')->withErrors(['Toko gagal dihapus.']);
+            // Log the error for debugging purposes
+            Log::error('Error deleting Toko or User:', ['message' => $e->getMessage()]);
+    
+            // Redirect back to the index with an error message
+            return redirect()->route('toko.index')->withErrors(['Toko gagal dihapus: ' . $e->getMessage()]);
         }
     }
+    
+
 }

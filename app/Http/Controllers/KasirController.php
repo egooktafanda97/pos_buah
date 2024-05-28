@@ -28,7 +28,7 @@ class KasirController extends Controller
 
     //crud
     #[Get("")]
-    #[RestController]
+    // #[RestController]
     public function index()
     {
 
@@ -40,8 +40,7 @@ class KasirController extends Controller
     #[Rules('required')]
     public function create()
     {
-        app('ioC')->index();
-        return view('kasir.create', [
+        return view('Page.Kasir.tambah', [
             "kasir" => Kasir::whereId("")->first()
         ]);
     }

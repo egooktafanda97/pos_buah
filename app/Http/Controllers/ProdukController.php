@@ -89,6 +89,7 @@ class ProdukController extends Controller
 
             $produk = Produk::create([
                 'toko_id' => $this->actorService->toko()->id,
+                'user_id' => $this->actorService->authId()->id,
                 'nama_produk' => $request->nama_produk,
                 'jenis_produk_id' => $request->jenis_produk_id,
                 'supplier_id' => $request->supplier_id,
