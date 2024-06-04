@@ -54,7 +54,6 @@ class HargaController extends Controller
 
 
     #[Post("tambahdata")]
-
     public function store(Request $request)
     {
         $request->validate([

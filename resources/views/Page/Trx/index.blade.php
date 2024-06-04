@@ -39,7 +39,6 @@
         prodSerach: [],
         searchQuery: '',
         searchProdukMethod: 'brcode',
-    
     }">
         <div class="page-content">
             <!--breadcrumb-->

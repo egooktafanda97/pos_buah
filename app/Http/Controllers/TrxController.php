@@ -17,12 +17,10 @@ use TaliumAttributes\Collection\Rutes\Post;
 #[Group(prefix: 'trx', middleware: ['auth'])]
 class TrxController extends Controller
 {
-
     public function __construct(
         public TrxService $trxService
     ) {
     }
-
 
     #[Get('')]
     public function show()
