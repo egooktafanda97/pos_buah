@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Harga;
 use App\Models\Produk;
 use App\Models\JenisSatuan;
+use App\Services\ActorService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -20,6 +21,10 @@ use TaliumAttributes\Collection\Rutes\Post;
 #[Group(prefix: 'harga', middleware: ['role:SUPER-ADMIN'])]
 class HargaController extends Controller
 {
+    public function __construct(
+        public ActorService $actorService
+    ) {
+    }
     #[Get("")]
     public function index()
     {
@@ -64,6 +69,8 @@ class HargaController extends Controller
 
         try {
             $harga = Harga::create([
+                'toko_id' => $this->actorService->toko()->id,
+                'user_id' => $this->actorService->authId()->id,
                 'harga_satuan' => $request->harga_satuan,
                 'produk_id' => $request->produk_id,
                 'jenis_satuan_id' => $request->jenis_satuan_id,
