@@ -17,19 +17,21 @@
                                         <div class="col-md-6 col-lg-4 col-xl-3">
                                             <div class="rounded border border-secondary position-relative fruite-item">
                                                 <div class="fruite-img">
-                                                    <img src="{{ $data->produk->gambar }}"
-                                                        class="img-fluid w-100 rounded-top" alt="">
+                                                    <img alt="" class="img-fluid w-100 rounded-top"
+                                                        src="{{ $data->produk->gambar }}">
                                                 </div>
                                                 <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                    style="top: 10px; left: 10px;">{{ $data->produk->stok }}
-                                                    {{ $data->jenisSatuan->nama_jenis_satuan }}</div>
+                                                    style="top: 10px; left: 10px;">
+                                                    {{ $data->produk->stok->jumlah }}
+                                                    {{ $data->produk->stok->satuan->nama ?? '' }}</div>
                                                 <div class="p-4  rounded-bottom">
                                                     <h4>{{ $data->produk->nama_produk }}</h4>
                                                     <p>{{ $data->produk->deskripsi }}</p>
                                                     <div class="d-flex justify-content-between flex-lg-wrap">
                                                         <p class="text-dark fs-5 fw-bold mb-0">Rp
-                                                            {{ number_format($data->harga_satuan) }} /
-                                                            {{ $data->jenisSatuan->nama_jenis_satuan }}</p>
+                                                            {{ $data->produk->hargaSatuanTerkecil()->harga }} /
+                                                            {{ $data->produk->hargaSatuanTerkecil()->jenisSatuan->nama }}
+                                                        </p>
 
                                                     </div>
                                                 </div>

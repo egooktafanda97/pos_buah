@@ -5,6 +5,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
+    {{-- barer token --}}
+    <meta content="{{ !empty(auth()->user()) ? auth()->guard('api')->login(auth()->user()) : null }}" name="csrf-token">
     <!--favicon-->
     <link href="{{ asset('admin') }}/assets/images/favicon-32x32.png" rel="icon" type="image/png" />
     <!--plugins-->
@@ -61,7 +63,7 @@
         <header>
             <div class="topbar d-flex align-items-center">
                 <nav class="navbar navbar-expand">
-                    <div class="mobile-toggle-menu"><i class='bx bx-menu'></i>
+                    {{-- <div class="mobile-toggle-menu"><i class='bx bx-menu'></i>
                     </div>
                     <div class="search-bar flex-grow-1">
                         <div class="position-relative search-bar-box">
@@ -71,9 +73,10 @@
                             <span class="position-absolute top-50 search-close translate-middle-y"><i
                                     class='bx bx-x'></i></span>
                         </div>
-                    </div>
+                    </div> --}}
 
                 </nav>
+                <strong class="mr-10">{{ auth()->user()->username }}</strong>
             </div>
         </header>
         <!--end header -->

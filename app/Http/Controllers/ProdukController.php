@@ -7,10 +7,14 @@ use App\Models\Produk;
 use App\Models\JenisProduk;
 use App\Models\Supplier;
 use App\Models\Harga;
+use App\Models\JenisSatuan;
+use App\Models\Rak;
 use App\Models\User;
 use App\Services\ActorService;
 use App\Services\ProdukService;
+use App\Services\StatusService;
 use App\Services\TrxService;
+use App\Utils\Helpers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -43,15 +47,21 @@ class ProdukController extends Controller
     #[Get("tambah")]
     public function formtambah()
     {
+        $rak = Rak::where('toko_id', $this->actorService->toko()->id)->get();
+        $satuan_jual = JenisSatuan::where('toko_id', $this->actorService->toko()->id)->get();
+
         $jenisProduk = JenisProduk::all();
         $suppliers = Supplier::all();
         $hargas = Harga::all();
-        return view('Page.Produk.tambah', compact('jenisProduk', 'suppliers', 'hargas'));
+        return view('Page.Produk.tambah', compact('jenisProduk', 'suppliers', 'hargas', 'rak', 'satuan_jual'));
     }
 
     #[Get("edit/{id}")]
     public function editForm($id)
     {
+        $rak = Rak::where('toko_id', $this->actorService->toko()->id)->get();
+        $satuan_jual = JenisSatuan::where('toko_id', $this->actorService->toko()->id)->get();
+
         $produk = Produk::find($id);
         if (!$produk) {
             return redirect()->back()->withErrors(['Produk tidak ditemukan.']);
@@ -60,7 +70,7 @@ class ProdukController extends Controller
         $suppliers = Supplier::all();
         $hargas = Harga::all();
 
-        return view('Page.Produk.edit', compact('produk', 'jenisProduk', 'suppliers', 'hargas'));
+        return view('Page.Produk.edit', compact('produk', 'jenisProduk', 'suppliers', 'hargas', 'rak', 'satuan_jual'));
     }
 
 
@@ -71,34 +81,38 @@ class ProdukController extends Controller
             'nama_produk' => 'required|string|max:255',
             'supplier_id' => 'required|numeric|min:0',
             'jenis_produk_id' => 'required|numeric|min:0',
-            'stok' => 'required|integer|min:0',
             'barcode' => 'nullable',
             'deskripsi' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
-            $gambarFile = $request->file('gambar');
-            $gambarPath = null;
+            // $gambarFile = $request->file('gambar');
+            // $gambarPath = null;
 
-            if ($gambarFile) {
-                $gambarName = time() . '_' . $gambarFile->getClientOriginalName();
-                $gambarPath = $gambarFile->move(public_path('imgproduk'), $gambarName);
-                $gambarPath = '/imgproduk/' . $gambarName;
-            }
+            // if ($gambarFile) {
+            //     $gambarName = time() . '_' . $gambarFile->getClientOriginalName();
+            //     $gambarPath = $gambarFile->move(public_path('imgproduk'), $gambarName);
+            //     $gambarPath = '/imgproduk/' . $gambarName;
+            // }
 
-            $produk = Produk::create([
+            $data = [
                 'toko_id' => $this->actorService->toko()->id,
-                'user_id' => $this->actorService->authId()->id,
+                'user_id' => $this->actorService->authId(),
                 'nama_produk' => $request->nama_produk,
                 'jenis_produk_id' => $request->jenis_produk_id,
                 'supplier_id' => $request->supplier_id,
-                'stok' => $request->stok,
                 'barcode' => $request->barcode ?? '',
                 'deskripsi' => $request->deskripsi,
-                'gambar' => $gambarPath,
-            ]);
-
+                'rak_id' => $request->rak_id,
+                'satuan_jual_terkecil_id' => $request->satuan_jual_terkecil_id,
+                'status_id' => StatusService::Active,
+            ];
+            $uploaded = Helpers::Images($request, 'gambar', 'imgproduk');
+            if ($uploaded->status) {
+                $data['gambar'] = $uploaded->name;
+            }
+            $produk = Produk::create($data);
             if ($produk) {
                 Alert::success('Success', 'Produk berhasil ditambahkan!');
                 return redirect()->route('produk.index');
@@ -106,10 +120,6 @@ class ProdukController extends Controller
                 throw new \Exception('Gagal menyimpan produk.');
             }
         } catch (\Exception $e) {
-            // Jika terjadi kesalahan, hapus file gambar jika ada
-            if ($gambarPath) {
-                unlink($gambarPath);
-            }
             Alert::error('Error', 'Gagal menambahkan produk: ' . $e->getMessage());
             return redirect()->route('produk.index');
         }
@@ -145,7 +155,8 @@ class ProdukController extends Controller
         if (!empty($request->supplier_id))
             $produk->supplier_id = $request->supplier_id;
         $produk->jenis_produk_id = $request->jenis_produk_id;
-        $produk->stok = $request->stok;
+        $produk->rak_id = $request->rak_id;
+        $produk->satuan_jual_terkecil_id = $request->satuan_jual_terkecil_id;
         if (!empty($request->barcode))
             $produk->barcode = $request->barcode ?? '';
         $produk->deskripsi = $request->deskripsi;

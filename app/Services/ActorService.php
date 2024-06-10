@@ -70,7 +70,7 @@ class ActorService
     public function pelanggan($id)
     {
         $pelangganId = $this->pelanggan->where('id', $id)->first();
-        return null;
+        return $pelangganId->id ?? null;
     }
 
     public function blok($id)

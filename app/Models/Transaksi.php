@@ -24,10 +24,12 @@ class Transaksi extends Model
         'total_bayar',
         'kembalian',
         'payment_type_id',
+        'pph',
         'status_id'
     ];
 
     // Define relationships
+    // toroli
 
     public function toko()
     {
@@ -61,6 +63,6 @@ class Transaksi extends Model
 
     public function troli()
     {
-        return $this->hasMany(DetailTransaksi::class, 'id', 'transaksi_id');
+        return $this->hasMany(DetailTransaksi::class, 'transaksi_id', 'id');
     }
 }

@@ -15,6 +15,8 @@ class Harga extends Model
         'toko_id',
         'produks_id',
         'harga',
+        'diskon',
+        'harga_diskon',
         'jenis_satuan_id',
         'user_update_id'
     ];

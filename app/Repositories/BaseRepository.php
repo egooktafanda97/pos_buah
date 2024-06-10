@@ -95,11 +95,13 @@ abstract class BaseRepository
         return $this->model->find($id);
     }
 
-    public function getWhere($obj)
+    public function getWhere($where, $with = [])
     {
-        return $this->model->where(function ($q) use (&$obj) {
-            return $obj($q);
-        })->get();
+        return $this->model->where(function ($q) use (&$where) {
+            return $where($q);
+        })->with($with)
+            ->orderBy('id', 'desc')
+            ->get();
     }
     public function findWhere($obj)
     {
@@ -108,9 +110,10 @@ abstract class BaseRepository
         })->first();
     }
 
+
     public function findWhereWith($where, $with = [])
     {
-        return $this->model->where(function ($q) use (&$where) {
+        return  $this->model->where(function ($q) use (&$where) {
             return $where($q);
         })->with($with)->first();
     }

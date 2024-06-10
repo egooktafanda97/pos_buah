@@ -75,6 +75,16 @@ class ProdukAsset extends Seeder
                     'harga' => $value[0]['harga']
                 ]);
 
+                $this->hargaService->crete([
+                    'user_id' => 1,
+                    'toko_id' => Toko::first()->id,
+                    'produks_id' => $produk->id,
+                    'jenis_satuan_id' => JenisSatuan::where('nama', "Box")->first()->id,
+                    'harga' => $value[0]['harga'] * 10
+                ]);
+
+
+
                 $this->konversiSatuanService->create([
                     'toko_id' => Toko::first()->id,
                     'produks_id' => $produk->id,

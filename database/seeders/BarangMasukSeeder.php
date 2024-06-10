@@ -31,7 +31,7 @@ class BarangMasukSeeder extends Seeder
                 'supplier_id' => Supplier::first()->id,
                 'harga_beli' => (int)$faker->randomFloat(0, 1000, 100000), // harnga satuan
                 'satuan_beli_id' => rand(1, 2),
-                'jumlah_barang_masuk' => rand(1, 50),
+                'jumlah_barang_masuk' => 1,
                 'jumlah_barang_keluar' => 0
             ])->store();
         }

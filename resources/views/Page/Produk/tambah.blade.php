@@ -46,11 +46,31 @@
                                 placeholder="barcode Buah xxxx" type="text" />
                         </div>
 
-                        <div class="col-12">
+                        <div class="col-md-6">
+                            <label class="form-label" for="rak_id">RAK</label>
+                            <select class="form-control" name="rak_id">
+                                <option value="">-- Pilih Rak Penyimpanan --</option>
+                                @foreach ($rak as $jenis)
+                                    <option value="{{ $jenis->id }}">{{ $jenis->nomor }} - {{ $jenis->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="satuan_jual_terkecil_id">SATUAN JUAL</label>
+                            <select class="form-control" name="satuan_jual_terkecil_id">
+                                <option value="">-- Pilih Satuan Jual --</option>
+                                @foreach ($satuan_jual as $jenis)
+                                    <option value="{{ $jenis->id }}">{{ $jenis->nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- <div class="col-12">
                             <label class="form-label" for="stok">STOK</label>
                             <input class="form-control border-start-0" id="stok" name="stok" placeholder="Stok Buah"
                                 required type="number" />
-                        </div>
+                        </div> --}}
                         <div class="col-12">
                             <label class="form-label" for="deskripsi">DESKRIPSI</label>
                             <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Deskripsi Buah" required rows="3"></textarea>

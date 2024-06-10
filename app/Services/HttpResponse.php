@@ -15,6 +15,15 @@ class HttpResponse
             "data" => $data
         ]);
     }
+
+    public static function error($msg = 'error')
+    {
+        return (new HttpResponse())->setResponse([
+            "msg" => $msg,
+            "data" => []
+        ]);
+    }
+
     public function setResponse($resposes)
     {
         $this->resposes = $resposes;
@@ -23,6 +32,6 @@ class HttpResponse
 
     public function code($status)
     {
-        return response()->json($this->resposes, $status ?? HttpStatus::HTTP_OK);
+        return response()->json($this->resposes ?? [], $status ?? HttpStatus::HTTP_OK);
     }
 }

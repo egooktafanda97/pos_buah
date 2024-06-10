@@ -11,8 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('config_tokos', function (Blueprint $table) {
+        Schema::create('config_toko', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('toko_id');
+            $table->foreign('toko_id')->references('id')->on('toko');
+            $table->string('key');
+            $table->string('value');
+            $table->string('type')->nullable();
+            $table->string('description')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

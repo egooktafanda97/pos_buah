@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Constant\PayType;
 use Illuminate\Support\Str;
 use App\Dtos\ContainerTrx;
+use App\Models\ConfigToko;
 use App\Models\JenisSatuan;
 use App\Models\Transaksi;
 use App\Repositories\HargaRepository;
@@ -58,6 +59,8 @@ class TrxService
         $this->containerTrx->pelanggan = $this->actorService->pelanggan($data['pelanggan_id'] ?? null);
         $this->containerTrx->payment_type_id = $data['payment_type_id'] ?? null;
         $this->containerTrx->totalBayar = $data['total_bayar'] ?? 0;
+        $this->containerTrx->diskon = $data['diskon'] ?? 0;
+        $this->containerTrx->pph = $data['pph'] ?? ConfigToko::get('pph', 0);
         return $this;
     }
 
@@ -82,11 +85,12 @@ class TrxService
                             'invoice' => $this->containerTrx->invoice,
                             'tanggal' => Carbon::now()->format("Y-m-d"),
                             'pelanggan_id' => $this->containerTrx->pelanggan,
-                            'diskon' => 0,
+                            'diskon' => $this->containerTrx->diskon,
                             'total_belanja' => $this->containerTrx->getSubTotal(),
                             'total_bayar' => $this->containerTrx->totalBayar,
                             'kembalian' => $this->containerTrx->getTotalKembali(),
                             'payment_type_id' => $this->containerTrx->payment_type_id ?? PayType::CASH,
+                            'pph' => $this->containerTrx->pph,
                             'status_id' => StatusService::success,
                         ]
                     )->create(next: function ($trxData) {
@@ -104,7 +108,7 @@ class TrxService
                                     'satuan_id' => $prod['satuan_beli'],
                                     'jumlah' => $prod['qty'],
                                     'total' => $prod['total'],
-                                    'diskon' => 0,
+                                    'diskon' => $prod['diskon'] ?? 0,
                                     'status_id' => StatusService::success,
                                 ])->create(next: function ($troli) use ($prod) {
                                     $stoks = $this->stokRepository->update($prod['id'], [
@@ -132,6 +136,125 @@ class TrxService
                 },
                 with: ['troli']
             );
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw new \Exception($th->getMessage());
+        }
+    }
+
+    public function fackture($invoce)
+    {
+        $total =  $this->trxRepository->findWhereWith(
+            where: function ($query) use ($invoce) {
+                return $query->where("invoice", $invoce)
+                    ->where("status_id", StatusService::success);
+            },
+            with: $this->trxRepository->withAll()
+        );
+        $totalItems = collect($total->troli)->sum('total');
+        $diskon = $this->trxRepository->getSubTotalDiskon($totalItems, $total->diskon);
+        $total_diskon = $totalItems -  $diskon ?? 0;
+        $total->sub_total_diskon = $diskon ?? 0;
+        $total->sub_total_pph = $this->trxRepository->getSubTotalPph($total_diskon ?? 0, $total->pph);
+        return $total;
+    }
+    // history
+    public function getList($data = null)
+    {
+        $items = $this->trxRepository->getWhere(
+            where: function ($query) use ($data) {
+                return $query->where("toko_id", $this->actorService->toko()->id)
+                    ->when(!empty($data['rage']), function ($q) use ($data) {
+                        return $q->whereBetween("tanggal", $data['rage']);
+                    })
+                    ->when(!empty($data['invoice']), function ($q) use ($data) {
+                        return $q->where("invoice", $data['invoice']);
+                    })
+                    ->when(!empty($data['search']), function ($q) use ($data) {
+                        return $q->where("invoice", "like", "%" . $data['search'] . "%")
+                            ->orWhereHas('pelanggan', function ($q) use ($data) {
+                                return $q->where("nama", "like", "%" . $data['search'] . "%");
+                            })
+                            ->orWhereHas('kasir', function ($q) use ($data) {
+                                return $q->where("nama", "like", "%" . $data['search'] . "%");
+                            });
+                    })
+                    ->where("status_id", StatusService::success);
+            },
+            with: $this->trxRepository->withAll()
+        )->map(function ($trx) {
+            $totalItems = collect($trx->troli)->sum('total');
+            $diskon = $this->trxRepository->getSubTotalDiskon($totalItems, $trx->diskon);
+            $total_diskon = $totalItems -  $diskon ?? 0;
+            $trx->sub_total_diskon = $diskon ?? 0;
+            $trx->sub_total_pph = $this->trxRepository->getSubTotalPph($total_diskon ?? 0, $trx->pph);
+            return $trx;
+        });
+        return $items;
+    }
+
+    public function detailDTO(array $data)
+    {
+        return [
+            "Invoice" => $data['invoice'],
+            "Tanggal" => $data['tanggal'],
+            "Kasir" => $data['kasir']['nama'],
+            "Total Belanja" => "Rp. " . number_format($data['total_belanja']),
+            "Diskon" => "(" . $data['diskon'] . " %) " .  "Rp. " . number_format($data['sub_total_diskon']),
+            "Pph" => "(" . $data['pph'] . "%) " . "Rp. " . number_format($data['sub_total_pph']),
+            "Total Bayar" => "Rp. " . number_format($data['total_bayar']),
+            "Kembalian" => $data['kembalian'],
+            "Metode Pembayaran" => $data['payment_type']['name'],
+            "Status" => $data['status']['nama'],
+            "Deskripsi Toko" => $data['toko']['deskripsi'],
+            "Alamat Toko" => $data['toko']['alamat'],
+            "Telepon Toko" => $data['toko']['telepon'],
+            "Nama Pelanggan" => $data['pelanggan'] ? $data['pelanggan']['nama'] : "Tidak ada pelanggan",
+            "Deskripsi Pembayaran" => $data['payment_type']['description']
+        ];
+    }
+
+    public function ItemsDTO(array $data)
+    {
+        return collect($data['troli'])->map(function ($fx) {
+            return [
+                "Nama Produk" => $fx['produk']['nama_produk'],
+                "Harga" =>  "Rp. " . number_format($fx['harga']['harga']),
+                "Jumlah" => $fx['jumlah'] . " " . $fx['harga']['jenis_satuan']['nama'],
+                "Total" => "Rp. " . number_format($fx['total']),
+            ];
+        });
+    }
+
+    // remove
+    public function remove($invoice)
+    {
+        DB::beginTransaction();
+        try {
+            $trx = $this->trxRepository->findWhereWith(
+                where: function ($query) use ($invoice) {
+                    return $query->where("invoice", $invoice);
+                },
+                with: ['troli']
+            );
+            $this->trxRepository->update($trx->id, ['status_id' => StatusService::cancelle]);
+            collect($trx->troli)->map(function ($fx) {
+                $this->stokRepository->update($fx->produks_id, [
+                    "jumlah_sebelumnya" => $fx->jumlah,
+                    "jumlah" => $fx->jumlah + $fx->jumlah
+                ]);
+                $this->stokDetailRepository->validate([
+                    'stok_id' => $fx->produks_id,
+                    'toko_id' => $this->actorService->toko()->id,
+                    'produks_id' => $fx->produks_id,
+                    "jumlah_sebelumnya" => $fx->jumlah,
+                    "jumlah" => $fx->jumlah + $fx->jumlah,
+                    'satuan_id' => $fx->satuan_id,
+                    'tipe' => 'masuk'
+                ])->create();
+            });
+            DB::commit();
+            return $trx;
         } catch (\Throwable $th) {
             DB::rollback();
             throw new \Exception($th->getMessage());

@@ -15,6 +15,7 @@ class ContainerTrx
     public  $pelanggan;
     public  $jenisSatuan;
     public $diskon = 0;
+    public $pph;
     public int  $totalOrder;
     public  $troli;
     public array $items = [];
@@ -26,6 +27,32 @@ class ContainerTrx
     public $initStok;
     public $afterStok;
 
+    public function setPph($pph)
+    {
+        $this->pph = $pph;
+        return $this;
+    }
+
+    public function getPph($total)
+    {
+        if ($this->pph != 0)
+            return $total * ($this->pph / 100);
+        return 0;
+    }
+
+    public function setDiskon($diskon)
+    {
+        $this->diskon = $diskon;
+        return $this;
+    }
+
+    public function getDiskon()
+    {
+        if ($this->diskon != 0)
+            return $this->totalOrder * ($this->diskon / 100);
+        return 0;
+    }
+
     public function totalDiskon(): int
     {
         if ($this->diskon != 0)
@@ -35,7 +62,10 @@ class ContainerTrx
 
     public function getSubTotal()
     {
-        return ($this->totalOrder) - ($this->diskon);
+        $totalOrder = ($this->totalOrder - $this->getDiskon());
+        $pph = +$this->getPph($totalOrder);
+        $subtotal = $totalOrder + $pph;
+        return $subtotal;
     }
 
     public function getTotalKembali()
@@ -48,7 +78,7 @@ class ContainerTrx
         $this->items = collect($this->data['items'])->map(function ($px) use ($produkRepository) {
             return $produkRepository->getPrieces(
                 id: $px['id'],
-                satuan: $px['satuan'],
+                unit: $px['satuan'],
                 qty: $px['qty']
             );
         })->toArray();

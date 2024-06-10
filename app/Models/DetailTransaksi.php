@@ -64,4 +64,18 @@ class DetailTransaksi extends Model
     {
         return $this->belongsTo(Status::class, 'status_id');
     }
+
+    public static function withAll()
+    {
+        return [
+            'transaksi',
+            'produk',
+            'satuan',
+            'harga',
+            'kasir',
+            'user',
+            'toko',
+            'status'
+        ];
+    }
 }

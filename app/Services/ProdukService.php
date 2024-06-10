@@ -42,6 +42,8 @@ class ProdukService
                 return $h->with('jenisSatuan');
             })
             ->take(5)->get()->map(function ($prod) {
+                $prod->harga_init =  $prod->hargaSatuanTerkecil()->harga;
+                $prod->satuan_init =  $prod->hargaSatuanTerkecil()->jenisSatuan->id;
                 return $prod;
             });
     }

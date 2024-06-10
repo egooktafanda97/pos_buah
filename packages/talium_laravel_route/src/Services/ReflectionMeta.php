@@ -148,6 +148,8 @@ class ReflectionMeta
             if (!empty($guardAttr)) {
                 $name = $guardAttr[0]->newInstance()->controller;
                 $methodData['attributes']['guard'] = $name;
+                $middlewares = $guardAttr[0]->newInstance()->middleware;
+                $methodData['attributes']['middleware-guard'] = $middlewares;
             }
 
             // Mendapatkan atribut Name dari metode jika ada

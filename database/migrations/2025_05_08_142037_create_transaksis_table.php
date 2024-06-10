@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('total_bayar');
             $table->integer('kembalian')->nullable();
             $table->unsignedInteger('payment_type_id');
+            $table->integer('pph')->default(0);
             $table->unsignedInteger('status_id')->default(1);
             $table->timestamps();
 

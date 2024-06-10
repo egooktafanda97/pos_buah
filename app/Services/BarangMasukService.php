@@ -42,8 +42,8 @@ class BarangMasukService
         $this->toko = $this->actorService->toko(tokoId: $data['toko_id']);
         $this->suplier = $this->actorService->supplier($data['supplier_id']);
         $this->jenisSatuan = $this->jenisSatuanModel->find($data['satuan_beli_id']);
-        $this->harga_beli = $data['jumlah_barang_masuk'];
-        $this->jumlah_barang_masuk = $data['harga_beli'];
+        $this->harga_beli = $data['harga_beli'];
+        $this->jumlah_barang_masuk = $data['jumlah_barang_masuk'];
         $this->stokFinal =  $this->stokRepository->findWhere(function ($stoks) {
             return $stoks->where("produks_id", $this->produk->id);
         });

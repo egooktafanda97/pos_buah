@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProdukAsset::class);
         $this->call(SupplierSeed::class);
         $this->call(BarangMasukSeeder::class);
+        $this->call(ConfigSeeder::class);
+        $this->call(PelangganSeeder::class);
     }
 }

@@ -7,7 +7,7 @@ use Attribute;
 #[Attribute]
 class RestController
 {
-    public function __construct(public $controller = 'api')
+    public function __construct(public $controller = 'api', public $middleware = ["api"])
     {
     }
 }

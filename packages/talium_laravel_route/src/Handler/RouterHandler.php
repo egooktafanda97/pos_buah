@@ -81,6 +81,7 @@ class RouterHandler
                     $router['url'] = $url_method;
                     $router['controller'] = [$data['class'], $methodName];
                     $router['guard'] = $attributes['guard'] ?? null;
+                    $router['middleware-guard'] = $attributes['middleware-guard'] ?? null;
                     // group
 
                     if (!empty($data['attribute']['group'])) {
@@ -111,6 +112,8 @@ class RouterHandler
                     if (!empty($data['attribute']['guard'])) {
                         $router['name'] = $data['attribute']['guard'];
                     }
+
+
 
                     if (!empty($attributes['name'])) {
                         $router['name'] .= "." . $attributes['name'];
@@ -151,7 +154,7 @@ class RouterHandler
                 if (!empty($routes['attribute'])) {
                     $arr = self::build((ReflectionMeta::HirarchyAttributes($item)));
                     foreach ($arr as $router) {
-                        $routes_list[] = array_merge($router, ["http-contex" => $router['guard'] ?? $key ?? 'web']);
+                        $routes_list[] = array_merge($router, ["http-contex" => $router['guard'] ?? $key ?? 'web', ...!empty($router['middleware-guard']) ? ["http-middleware" => $router['middleware-guard']] : []]);
                     }
                 }
             }
@@ -161,9 +164,9 @@ class RouterHandler
 
                 Route::group([], function () use ($router) {
                     $groups = collect($router['attribute_group'])
-                        ->merge($router['http-contex'] === "api" ? ["middleware" => "api", "prefix" => "api/" . ($router['attribute_group']['prefix'] ?? '')] : ["middleware" => "web"])
+                        ->merge($router['http-contex'] === "api" ? ["middleware" => !empty($router['middleware-guard']) ? $router['middleware-guard'] : "auth:api", "prefix" => "api/" . ($router['attribute_group']['prefix'] ?? '')] : ["middleware" => "web"])
                         ->toArray();
-                    Route::group($groups ?? [], function () use ($router) {
+                    Route::group(array_merge($groups ?? []), function () use ($router) {
                         if (is_array($router['url'])) {
                             foreach ($router['url'] as $url) {
                                 Route::group($router['method_group'] ?? [], function () use ($url, $router) {

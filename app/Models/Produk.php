@@ -24,6 +24,7 @@ class Produk extends Model
         'jenis_produk_id',
         'supplier_id',
         'barcode',
+        'diskon',
         'rak_id',
         'satuan_jual_terkecil_id',
         'status_id',
@@ -64,6 +65,14 @@ class Produk extends Model
     {
         return $this->hasMany(Harga::class, 'produks_id');
     }
+
+    public function hargaSatuanTerkecil()
+    {
+        return $this->harga()->where('jenis_satuan_id', $this->satuan_jual_terkecil_id)->first();
+    }
+
+
+
 
     public function stok()
     {

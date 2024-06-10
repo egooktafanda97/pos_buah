@@ -30,6 +30,7 @@ return new class extends Migration
             $table->unsignedBigInteger('jenis_produk_id');
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->string('barcode', 100)->nullable();
+            $table->integer('diskon')->nullable()->default(0);
             $table->unsignedInteger('rak_id')->nullable();
             $table->unsignedBigInteger('satuan_jual_terkecil_id');
             $table->foreign('satuan_jual_terkecil_id')->references('id')->on('jenis_satuans');

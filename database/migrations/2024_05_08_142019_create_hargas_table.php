@@ -17,6 +17,8 @@ return new class extends Migration
             $table->unsignedInteger('toko_id');
             $table->unsignedBigInteger('produks_id');
             $table->integer('harga');
+            $table->integer('diskon')->nullable()->default(0);
+            $table->integer('harga_diskon')->nullable()->default(0);
             $table->unsignedBigInteger('jenis_satuan_id');
             $table->unsignedBigInteger('user_update_id')->nullable();
             $table->timestamps();

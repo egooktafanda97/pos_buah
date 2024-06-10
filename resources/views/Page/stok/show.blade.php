@@ -33,10 +33,9 @@
                                     <th>NAMA</th>
                                     <th>JENIS</th>
                                     <th>SUPPLIER</th>
-                                    {{-- <th>STOK</th> --}}
+                                    <th>STOK</th>
                                     <th>DESKRIPSI</th>
                                     <th>GAMBAR</th>
-                                    <th>AKSI</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,7 +44,7 @@
                                         <td>{{ $produk->nama_produk }}</td>
                                         <td>{{ $produk->jenisProduk->nama_jenis_produk }}</td>
                                         <td>{{ $produk->supplier->nama_supplier ?? '' }}</td>
-                                        {{-- <td>{{ $produk->stok }}</td> --}}
+                                        <td>{{ $produk->stok }}</td>
                                         <td>{{ $produk->deskripsi }}</td>
                                         <td>
 
@@ -78,17 +77,6 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>
-                                            <a class="btn btn-sm btn-primary"
-                                                href="{{ url('produk/edit', ['id' => $produk->id]) }}"><i
-                                                    class='bx bx-pencil'></i></a>
-                                            <button class="btn btn-sm btn-danger btn-delete"
-                                                data-id="{{ $produk->id }}"><i class='bx bx-trash'></i></button>
-                                            <form action="{{ url('produk/hapus', ['id' => $produk->id]) }}"
-                                                id="delete-form-{{ $produk->id }}" method="GET" style="display: none;">
-                                                @csrf
-                                            </form>
-                                        </td>
                                     </tr>
                                 @endforeach
 
@@ -98,7 +86,7 @@
                                     <th>NAMA</th>
                                     <th>JENIS</th>
                                     <th>SUPPLIER</th>
-                                    {{-- <th>STOK</th> --}}
+                                    <th>STOK</th>
                                     <th>DESKRIPSI</th>
                                     <th>GAMBAR</th>
                                     <th>AKSI</th>
