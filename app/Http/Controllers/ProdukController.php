@@ -79,7 +79,7 @@ class ProdukController extends Controller
     {
         $request->validate([
             'nama_produk' => 'required|string|max:255',
-            'supplier_id' => 'required|numeric|min:0',
+            'supplier_id' => 'nullable|numeric|min:0',
             'jenis_produk_id' => 'required|numeric|min:0',
             'barcode' => 'nullable',
             'deskripsi' => 'nullable|string',
@@ -87,15 +87,6 @@ class ProdukController extends Controller
         ]);
 
         try {
-            // $gambarFile = $request->file('gambar');
-            // $gambarPath = null;
-
-            // if ($gambarFile) {
-            //     $gambarName = time() . '_' . $gambarFile->getClientOriginalName();
-            //     $gambarPath = $gambarFile->move(public_path('imgproduk'), $gambarName);
-            //     $gambarPath = '/imgproduk/' . $gambarName;
-            // }
-
             $data = [
                 'toko_id' => $this->actorService->toko()->id,
                 'user_id' => $this->actorService->authId(),
@@ -133,7 +124,6 @@ class ProdukController extends Controller
             'nama_produk' => 'required|string|max:255',
             'supplier_id' => 'nullable|numeric|min:0',
             'jenis_produk_id' => 'required|numeric|min:0',
-            'stok' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
         ]);
 

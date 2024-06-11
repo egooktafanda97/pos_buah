@@ -17,6 +17,7 @@ class BarangMasuk extends Model
         'supplier_id',
         'harga_beli',
         'satuan_beli_id',
+        'jumlah_selebelumnya',
         'jumlah_barang_masuk',
         'jumlah_barang_keluar',
         'status_id'

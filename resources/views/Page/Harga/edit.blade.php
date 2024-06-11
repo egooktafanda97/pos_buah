@@ -11,22 +11,22 @@
                         </div>
                     </div>
                     <hr>
-                    <form class="row g-3" action="{{ url('harga/editdata/' . $harga->id) }}" method="POST"
-                        enctype="multipart/form-data">
+                    <form action="{{ url('harga/editdata/' . $harga->id) }}" class="row g-3" enctype="multipart/form-data"
+                        method="POST">
                         @csrf
                         <!-- Token CSRF -->
                         <div class="col-md-6">
-                            <label for="harga_satuan" class="form-label">HARGA SATUAN</label>
-                            <input type="text" class="form-control border-start-0" id="harga_satuan" name="harga_satuan"
-                                placeholder="Harga Satuan" value="{{ $harga->harga_satuan }}" required />
+                            <label class="form-label" for="harga_satuan">HARGA SATUAN</label>
+                            <input class="form-control border-start-0" id="harga_satuan" name="harga_satuan"
+                                placeholder="Harga Satuan" required type="text" value="{{ $harga->harga_satuan }}" />
                         </div>
 
                         <div class="col-md-6">
-                            <label for="produk_id" class="form-label">PRODUK</label>
-                            <select name="produk_id" class="form-control">
+                            <label class="form-label" for="produk_id">PRODUK</label>
+                            <select class="form-control" name="produk_id">
                                 <option value="">-- Pilih Produk --</option>
                                 @foreach ($produk as $p)
-                                    <option value="{{ $p->id }}" {{ $p->id == $harga->produk_id ? 'selected' : '' }}>
+                                    <option {{ $p->id == $harga->produk_id ? 'selected' : '' }} value="{{ $p->id }}">
                                         {{ $p->nama_produk }}
                                     </option>
                                 @endforeach
@@ -34,13 +34,13 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="jenis_satuan_id" class="form-label">JENIS SATUAN</label>
-                            <select name="jenis_satuan_id" class="form-control">
+                            <label class="form-label" for="jenis_satuan_id">JENIS SATUAN</label>
+                            <select class="form-control" name="jenis_satuan_id">
                                 <option value="">-- Pilih Jenis Satuan --</option>
                                 @foreach ($satuan as $s)
-                                    <option value="{{ $s->id }}"
-                                        {{ $s->id == $harga->jenis_satuan_id ? 'selected' : '' }}>
-                                        {{ $s->nama_jenis_satuan }}
+                                    <option {{ $s->id == $harga->jenis_satuan_id ? 'selected' : '' }}
+                                        value="{{ $s->id }}">
+                                        {{ $s->nama }}
                                     </option>
                                 @endforeach
                             </select>
@@ -48,7 +48,7 @@
 
                         <div class="w-100 border-top"></div>
                         <div class="col">
-                            <button type="submit" class="btn btn-outline-success"><i class='bx bx-save me-0'></i>
+                            <button class="btn btn-outline-success" type="submit"><i class='bx bx-save me-0'></i>
                             </button>
                         </div>
                     </form>

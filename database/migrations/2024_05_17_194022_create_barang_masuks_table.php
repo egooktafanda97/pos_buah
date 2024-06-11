@@ -14,13 +14,16 @@ return new class extends Migration
 
         Schema::create('barang_masuk', function (Blueprint $table) {
             $table->bigIncrements("id");
+            $table->string("kode");
             $table->unsignedInteger('toko_id');
             $table->unsignedBigInteger("user_id");
             $table->unsignedBigInteger("produks_id");
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->integer('harga_beli');
             $table->unsignedBigInteger('satuan_beli_id');
+            $table->integer('jumlah_selebelumnya');
             $table->integer('jumlah_barang_masuk');
+            // $table->integer('jumlah');
             $table->integer('jumlah_barang_keluar')->default(0);
             $table->unsignedInteger('status_id')->default(1);
             $table->foreign('status_id')->references('id')->on('status');
@@ -51,13 +54,16 @@ return new class extends Migration
 
         Schema::create('log_barang_masuk', function (Blueprint $table) {
             $table->bigIncrements("id");
+            $table->string("kode");
             $table->unsignedInteger('toko_id');
             $table->unsignedBigInteger("user_id");
             $table->unsignedBigInteger("produks_id");
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->integer('harga_beli');
             $table->unsignedBigInteger('satuan_beli_id');
+            $table->integer('jumlah_selebelumnya');
             $table->integer('jumlah_barang_masuk');
+            // $table->integer('jumlah');
             $table->integer('jumlah_barang_keluar')->default(0);
             $table->integer('stok_sisa');
             $table->unsignedBigInteger('satuan_stok_id');

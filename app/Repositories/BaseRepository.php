@@ -8,6 +8,17 @@ use Nette\Utils\Callback;
 abstract class BaseRepository
 {
     protected array $validated;
+    protected $ID;
+
+    public function setId($id)
+    {
+        $this->ID = $id;
+        return $this;
+    }
+    public function getId()
+    {
+        return $this->ID;
+    }
 
     public function __construct(
         public $model
@@ -47,7 +58,7 @@ abstract class BaseRepository
                 $next($created);
             return $created;
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage());
+            throw new \Exception('create: ' . $th->getMessage());
         }
     }
 
@@ -63,11 +74,27 @@ abstract class BaseRepository
         }
     }
 
-    public function update($id, array $data)
+    public function update($id, array $data = [])
     {
+
         try {
+            if (count($data) == 0)
+                $data = $this->validated;
             $model = $this->model->find($id);
             $model->update($data);
+            return $model;
+        } catch (\Throwable $th) {
+            throw new \Exception($th->getMessage());
+        }
+    }
+    // update Where
+
+    public function updateWhere($where, array $data = [])
+    {
+        try {
+            if (count($data) == 0)
+                $data = $this->validated;
+            $model = $this->model->where($where)->update($data);
             return $model;
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());

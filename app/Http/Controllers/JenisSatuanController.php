@@ -53,13 +53,13 @@ class JenisSatuanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_jenis_satuan' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
         ]);
 
         try {
             $jenissatuan = JenisSatuan::create([
                 'toko_id' => $this->actorService->toko()->id,
-                'nama_jenis_satuan' => $request->nama_jenis_satuan,
+                'nama' => $request->nama,
             ]);
 
             if ($jenissatuan) {
@@ -80,7 +80,7 @@ class JenisSatuanController extends Controller
     public function edit(Request $request, $id)
     {
         $request->validate([
-            'nama_jenis_satuan' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
 
         ]);
 
@@ -90,7 +90,7 @@ class JenisSatuanController extends Controller
             return redirect()->route('satuan.index')->withErrors(['Jenis Produk tidak ditemukan.']);
         }
 
-        $jenissatuan->nama_jenis_satuan = $request->nama_jenis_satuan;
+        $jenissatuan->nama = $request->nama;
 
 
         $jenissatuan->save();

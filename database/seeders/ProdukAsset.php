@@ -34,16 +34,24 @@ class ProdukAsset extends Seeder
         try {
             $asset = new AssetBarang();
             $getData = $asset->slice(10);
-            $satuan = collect($getData)->groupBy('Satuan');
 
-            $jenisProd = collect($getData)->groupBy('Jenis');
+
+
             JenisSatuan::create(['toko_id' => Toko::first()->id, 'nama' => "Box"]);
+            JenisSatuan::create(['toko_id' => Toko::first()->id, 'nama' => "LUSIN"]);
+
+            // satuan
+            $satuan = collect($getData)->groupBy('Satuan');
             JenisSatuan::insert($satuan->keys()->map(function ($x) {
                 return ['toko_id' => Toko::first()->id, 'nama' => $x];
             })->toArray());
+
+            // jenis produk
+            $jenisProd = collect($getData)->groupBy('Jenis');
             JenisProduk::insert($jenisProd->keys()->map(function ($x) {
                 return ['toko_id' => Toko::first()->id, 'nama_jenis_produk' => $x];
             })->toArray());
+
             $barang = collect($getData)->map(function ($x) {
                 return [
                     'toko_id' => Toko::first()->id,
@@ -82,25 +90,6 @@ class ProdukAsset extends Seeder
                     'jenis_satuan_id' => JenisSatuan::where('nama', "Box")->first()->id,
                     'harga' => $value[0]['harga'] * 10
                 ]);
-
-
-
-                $this->konversiSatuanService->create([
-                    'toko_id' => Toko::first()->id,
-                    'produks_id' => $produk->id,
-                    'satuan_id' => $value[0]['satuan'],
-                    'satuan_konversi_id' => $value[0]['satuan'],
-                    'nilai_konversi' => 1,
-                    'status_id' => 1
-                ]);
-                $this->konversiSatuanService->create([
-                    'toko_id' => Toko::first()->id,
-                    'produks_id' => $produk->id,
-                    'satuan_id' => $value[0]['satuan'],
-                    'satuan_konversi_id' => JenisSatuan::where('nama', "Box")->first()->id,
-                    'nilai_konversi' => 10,
-                    'status_id' => 1
-                ]);
             }
             DB::commit();
         } catch (\Throwable $th) {
@@ -109,3 +98,13 @@ class ProdukAsset extends Seeder
         }
     }
 }
+
+
+// $this->konversiSatuanService->create([
+//     'toko_id' => Toko::first()->id,
+//     'produks_id' => $produk->id,
+//     'satuan_id' => $value[0]['satuan'],
+//     'satuan_konversi_id' => $value[0]['satuan'],
+//     'nilai_konversi' => 1,
+//     'status_id' => 1
+// ]);

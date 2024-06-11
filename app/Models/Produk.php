@@ -29,6 +29,11 @@ class Produk extends Model
         'satuan_jual_terkecil_id',
         'status_id',
     ];
+    // satuan_jual_terkecil_id
+    public function satuanJualTerkecil()
+    {
+        return $this->belongsTo(JenisSatuan::class, 'satuan_jual_terkecil_id');
+    }
 
     // Relations
     public function toko()

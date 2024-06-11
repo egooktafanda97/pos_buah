@@ -61,8 +61,9 @@ class HargaController extends Controller
     #[Post("tambahdata")]
     public function store(Request $request)
     {
+
         $request->validate([
-            'harga_satuan' => 'required|string|max:255',
+            'harga_satuan' => 'required|max:255',
             'produk_id' => 'required|numeric|min:0',
             'jenis_satuan_id' => 'required|numeric|min:0',
         ]);
@@ -70,9 +71,9 @@ class HargaController extends Controller
         try {
             $harga = Harga::create([
                 'toko_id' => $this->actorService->toko()->id,
-                'user_id' => $this->actorService->authId()->id,
-                'harga_satuan' => $request->harga_satuan,
-                'produk_id' => $request->produk_id,
+                'user_id' => $this->actorService->authId(),
+                'harga' => $request->harga_satuan,
+                'produks_id' => $request->produk_id,
                 'jenis_satuan_id' => $request->jenis_satuan_id,
             ]);
 

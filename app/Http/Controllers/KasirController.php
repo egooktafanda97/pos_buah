@@ -14,9 +14,10 @@ use TaliumAttributes\Collection\Rutes\Get;
 use TaliumAttributes\Collection\Rutes\Name;
 use TaliumAttributes\Collection\Rutes\Group;
 use TaliumAttributes\Collection\Rutes\Post;
+use TaliumAttributes\Collection\Rutes\Put;
 
 #[Controllers()]
-#[Group(prefix: 'kasir', middleware: [], name: "kasirs")]
+#[Group(prefix: 'kasir', middleware: [], name: "kasir")]
 class KasirController extends Controller
 {
     public function __construct(
@@ -74,7 +75,7 @@ class KasirController extends Controller
         }
     }
 
-    #[Post("editdata/{id}")]
+    #[Put("editdata/{id}")]
     public function update(Request $request, $id)
     {
         try {

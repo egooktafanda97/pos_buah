@@ -13,12 +13,14 @@ class LogBarangMasuk extends Model
 
     // Define the fillable properties
     protected $fillable = [
+        'kode',
         'toko_id',
         'user_id',
         'produks_id',
         'supplier_id',
         'harga_beli',
         'satuan_beli_id',
+        'jumlah_selebelumnya',
         'jumlah_barang_masuk',
         'jumlah_barang_keluar',
         'stok_sisa',

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(KasirSeeder::class);
         $this->call(JenisProdukSeeder::class);
         $this->call(ProdukAsset::class);
+        $this->call(NilaiKonversi::class);
         $this->call(SupplierSeed::class);
         $this->call(BarangMasukSeeder::class);
         $this->call(ConfigSeeder::class);

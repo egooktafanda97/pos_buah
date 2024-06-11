@@ -45,11 +45,12 @@ class KasirService
 
     public function update($id, array $data)
     {
+
         DB::beginTransaction();
         try {
             $kasir = $this->kasirRepository->find($id);
             $data['user_id'] = $kasir->user_id;
-            $validation = Validator::make($data, $this->kasirRepository->rule());
+            $validation = Validator::make($data, $this->kasirRepository->updateRule());
             if ($validation->fails()) {
                 throw new \Exception($validation->errors()->first());
             }

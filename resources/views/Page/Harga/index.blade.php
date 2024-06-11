@@ -10,13 +10,13 @@
                         <ol class="breadcrumb mb-0 p-0">
                             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Data Harga</li>
+                            <li aria-current="page" class="breadcrumb-item active">Data Harga</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="ms-auto">
                     <div class="btn-group">
-                        <a href="/harga/tambah" class="btn btn-success"><i class='bx bx-plus-circle'></i> TAMBAH
+                        <a class="btn btn-success" href="/harga/tambah"><i class='bx bx-plus-circle'></i> TAMBAH
                             DATA</a>
                     </div>
                 </div>
@@ -27,12 +27,12 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+                        <table class="table table-striped table-bordered" id="example" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>HARGA SATUAN</th>
                                     <th>PRODUK</th>
-                                    <th>JENIS SATUAN</th>
+                                    <th>JENIS SATUAN JUAL</th>
                                     <th>AKSI</th>
 
                                 </tr>
@@ -40,19 +40,19 @@
                             <tbody>
                                 @foreach ($harga as $key => $harga)
                                     <tr>
-                                        <td>{{ $harga->harga_satuan }}</td>
+                                        <td>{{ 'Rp. ' . number_format($harga->harga) }}</td>
                                         <td>{{ $harga->produk->nama_produk }}</td>
-                                        <td>{{ $harga->jenisSatuan->nama_jenis_satuan }}</td>
+                                        <td>{{ $harga->jenisSatuan->nama }}</td>
 
 
                                         <td>
-                                            <a href="{{ url('harga/edit', ['id' => $harga->id]) }}"
-                                                class="btn btn-sm btn-primary"><i class='bx bx-pencil'></i></a>
+                                            <a class="btn btn-sm btn-primary"
+                                                href="{{ url('harga/edit', ['id' => $harga->id]) }}"><i
+                                                    class='bx bx-pencil'></i></a>
                                             <button class="btn btn-sm btn-danger btn-delete"
                                                 data-id="{{ $harga->id }}"><i class='bx bx-trash'></i></button>
-                                            <form id="delete-form-{{ $harga->id }}"
-                                                action="{{ url('harga/hapus', ['id' => $harga->id]) }}" method="GET"
-                                                style="display: none;">
+                                            <form action="{{ url('harga/hapus', ['id' => $harga->id]) }}"
+                                                id="delete-form-{{ $harga->id }}" method="GET" style="display: none;">
                                                 @csrf
                                             </form>
                                         </td>

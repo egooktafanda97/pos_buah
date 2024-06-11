@@ -8,7 +8,7 @@
                 <div class="breadcrumb-title pe-3">Barang Masuk</div>
                 <div class="ms-auto">
                     <div class="btn-group">
-                        <a href="{{ url('barangmasuk/tambah') }}" class="btn btn-success">
+                        <a class="btn btn-success" href="{{ url('barangmasuk/tambah') }}">
                             <i class='bx bx-plus-circle'></i> Tambah Data
                         </a>
                     </div>
@@ -22,12 +22,17 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Tanggal</th>
                                     <th>Produk</th>
                                     <th>Supplier</th>
-                                    <th>Harga Beli</th>
-                                    <th>Satuan Beli</th>
+                                    <th>Harga Beli / Satuan</th>
+                                    <th>Jumlah Sebelumnya</th>
                                     <th>Jumlah Barang Masuk</th>
-                                    <th>Jumlah Barang Keluar</th>
+                                    <th>Satuan Beli</th>
+                                    <th>Nulai Konversi Satuan</th>
+                                    <th>Stok Tersedia</th>
+                                    <th>Stok Aktual</th>
+                                    {{-- <th>Jumlah Barang Keluar</th> --}}
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -35,43 +40,50 @@
                                 @foreach ($barangMasuks as $barangMasuk)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($barangMasuk->created_at)->format('Y-m-d H:s:i') }}
+                                        </td>
                                         <td>{{ $barangMasuk->produk->nama_produk }}</td>
                                         <td>{{ $barangMasuk->supplier->nama_supplier }}</td>
-                                        <td>{{ $barangMasuk->harga_beli }}</td>
-                                        <td>{{ $barangMasuk->satuanBeli->nama_satuan }}</td>
-                                        <td>{{ $barangMasuk->jumlah_barang_masuk }}</td>
-                                        <td>{{ $barangMasuk->jumlah_barang_keluar }}</td>
+                                        <td>{{ 'Rp. ' . number_format($barangMasuk->harga_beli) }} /
+                                            {{ $barangMasuk->satuanBeli->nama }}</td>
+                                        <td>{{ $barangMasuk->jumlah_selebelumnya }}
+                                            {{ $barangMasuk->produk->satuanJualTerkecil->nama ?? '' }}
+                                        </td>
+                                        <td>{{ $barangMasuk->jumlah_barang_masuk }}
+                                            {{ $barangMasuk->satuanBeli->nama }}
+                                        </td>
+                                        <td>{{ $barangMasuk->satuanBeli->nama }}</td>
+                                        <td>{{ \App\Services\KonversiSatuanService::konversi($barangMasuk->produk->id, $barangMasuk->satuanBeli->id, $barangMasuk->jumlah_barang_masuk) }}
+                                            {{ $barangMasuk->produk->satuanJualTerkecil->nama ?? '' }}
+                                        </td>
+                                        <td>{{ $barangMasuk->jumlah_selebelumnya + \App\Services\KonversiSatuanService::konversi($barangMasuk->produk->id, $barangMasuk->satuanBeli->id, $barangMasuk->jumlah_barang_masuk) }}
+                                            {{ $barangMasuk->produk->satuanJualTerkecil->nama ?? '' }}
+                                        </td>
                                         <td>
-                                            <a href="{{ url('barangmasuk/edit', ['id' => $barangMasuk->id]) }}"
-                                                class="btn btn-sm btn-primary">
+                                            {{ \App\Models\Stok::where('produks_id', $barangMasuk->produk->id)->first()->jumlah }}
+                                            {{ $barangMasuk->produk->satuanJualTerkecil->nama ?? '' }}
+                                        </td>
+
+                                        {{-- <td>{{ $barangMasuk->jumlah_barang_keluar }}</td> --}}
+                                        <td>
+                                            <a class="btn btn-sm btn-primary"
+                                                href="{{ url('barangmasuk/edit', ['id' => $barangMasuk->id]) }}">
                                                 <i class='bx bx-pencil'></i>
                                             </a>
                                             <button class="btn btn-sm btn-danger btn-delete"
                                                 data-id="{{ $barangMasuk->id }}">
                                                 <i class='bx bx-trash'></i>
                                             </button>
-                                            <form action="{{ url('barangmasuk/destroy', ['id' => $barangMasuk->id]) }}"
+                                            <form
+                                                action="{{ url('barangmasuk/delete-proccess', ['id' => $barangMasuk->id]) }}"
                                                 id="delete-form-{{ $barangMasuk->id }}" method="POST"
                                                 style="display: none;">
                                                 @csrf
-                                                @method('DELETE')
                                             </form>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Produk</th>
-                                    <th>Supplier</th>
-                                    <th>Harga Beli</th>
-                                    <th>Satuan Beli</th>
-                                    <th>Jumlah Barang Masuk</th>
-                                    <th>Jumlah Barang Keluar</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>

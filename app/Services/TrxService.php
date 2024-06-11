@@ -52,6 +52,9 @@ class TrxService
 
     public function initialize($data)
     {
+        if (!$this->actorService->kasir())
+            throw new \Exception("kasir tidak ditemukan, silahkan login sebagai kasir");
+
         $this->containerTrx->data = $data;
         $this->containerTrx->toko = $this->actorService->toko();
         $this->containerTrx->kasir = $this->actorService->kasir();
@@ -138,7 +141,7 @@ class TrxService
             );
         } catch (\Throwable $th) {
             DB::rollback();
-            throw new \Exception($th->getMessage());
+            throw new \Exception('trx: ' . $th->getMessage());
         }
     }
 

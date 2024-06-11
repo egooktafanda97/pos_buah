@@ -7,7 +7,7 @@
                 <div class="breadcrumb-title pe-3">Edit Kasir</div>
                 <div class="ms-auto">
                     <div class="btn-group">
-                        <a href="{{ url('kasir') }}" class="btn btn-secondary"><i class='bx bx-arrow-back'></i>
+                        <a class="btn btn-secondary" href="{{ url('kasir') }}"><i class='bx bx-arrow-back'></i>
                             Kembali</a>
                     </div>
                 </div>
@@ -17,39 +17,39 @@
             <hr />
             <div class="card border-top border-0 border-4 border-primary">
                 <div class="card-body p-5">
-                    <form action="{{ url('kasir/editdata', ['id' => $kasir->id]) }}" method="POST" class="row g-3">
+                    <form action="{{ url('kasir/editdata', ['id' => $kasir->id]) }}" class="row g-3" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="col-md-6">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username"
-                                value="{{ old('username', $kasir->username) }}" required>
+                            <label class="form-label" for="username">Username</label>
+                            <input class="form-control" id="username" name="username" required type="text"
+                                value="{{ old('username', $kasir->username) }}">
                         </div>
                         <div class="col-md-6">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password">
+                            <label class="form-label" for="password">Password</label>
+                            <input class="form-control" id="password" name="password" type="password">
                             <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah password</small>
                         </div>
                         <div class="col-md-6">
-                            <label for="nama" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="nama" name="nama"
-                                value="{{ old('nama', $kasir->nama) }}" required>
+                            <label class="form-label" for="nama">Nama</label>
+                            <input class="form-control" id="nama" name="nama" required type="text"
+                                value="{{ old('nama', $kasir->nama) }}">
                         </div>
                         <div class="col-md-6">
-                            <label for="telepon" class="form-label">Telepon</label>
-                            <input type="text" class="form-control" id="telepon" name="telepon"
-                                value="{{ old('telepon', $kasir->telepon) }}" required>
+                            <label class="form-label" for="telepon">Telepon</label>
+                            <input class="form-control" id="telepon" name="telepon" required type="text"
+                                value="{{ old('telepon', $kasir->telepon) }}">
                         </div>
                         <div class="col-md-6">
-                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <label class="form-label" for="deskripsi">Deskripsi</label>
                             <textarea class="form-control" id="deskripsi" name="deskripsi" required>{{ old('deskripsi', $kasir->deskripsi) }}</textarea>
                         </div>
                         <div class="col-md-6">
-                            <label for="alamat" class="form-label">Alamat</label>
+                            <label class="form-label" for="alamat">Alamat</label>
                             <textarea class="form-control" id="alamat" name="alamat" required>{{ old('alamat', $kasir->alamat) }}</textarea>
                         </div>
                         <div class="col-12">
-                            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+                            <button class="btn btn-success" type="submit">Simpan Perubahan</button>
                         </div>
                     </form>
                 </div>

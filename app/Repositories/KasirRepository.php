@@ -28,4 +28,16 @@ class KasirRepository extends BaseRepository
             'deskripsi' => 'nullable|string|max:1000',
         ];
     }
+    //update rule nullbale
+    public function updateRule()
+    {
+        return [
+            'user_id' => 'nullable|exists:users,id',
+            'toko_id' => 'nullable|exists:toko,id',
+            'nama' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'telepon' => 'nullable|string|max:15',
+            'deskripsi' => 'nullable|string|max:1000',
+        ];
+    }
 }

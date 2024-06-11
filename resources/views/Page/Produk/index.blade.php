@@ -32,8 +32,7 @@
                                 <tr>
                                     <th>NAMA</th>
                                     <th>JENIS</th>
-                                    <th>SUPPLIER</th>
-                                    {{-- <th>STOK</th> --}}
+                                    <th>STOK</th>
                                     <th>DESKRIPSI</th>
                                     <th>GAMBAR</th>
                                     <th>AKSI</th>
@@ -44,8 +43,8 @@
                                     <tr>
                                         <td>{{ $produk->nama_produk }}</td>
                                         <td>{{ $produk->jenisProduk->nama_jenis_produk }}</td>
-                                        <td>{{ $produk->supplier->nama_supplier ?? '' }}</td>
-                                        {{-- <td>{{ $produk->stok }}</td> --}}
+                                        {{-- <td>{{ $produk->supplier->nama_supplier ?? '' }}</td> --}}
+                                        <td>{{ $produk->stok->jumlah }} {{ $produk->stok->satuan->nama }} </td>
                                         <td>{{ $produk->deskripsi }}</td>
                                         <td>
 
@@ -97,8 +96,7 @@
                                 <tr>
                                     <th>NAMA</th>
                                     <th>JENIS</th>
-                                    <th>SUPPLIER</th>
-                                    {{-- <th>STOK</th> --}}
+                                    <th>STOK</th>
                                     <th>DESKRIPSI</th>
                                     <th>GAMBAR</th>
                                     <th>AKSI</th>
