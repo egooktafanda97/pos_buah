@@ -5,8 +5,21 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
+    @php
+        $token = '';
+        try {
+            $token =
+                !empty(auth()->user()) && !empty(auth()->guard('api'))
+                    ? auth()
+                        ->guard('api')
+                        ->login(auth()->user())
+                    : null;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    @endphp
     {{-- barer token --}}
-    <meta content="{{ !empty(auth()->user()) ? auth()->guard('api')->login(auth()->user()) : null }}" name="csrf-token">
+    <meta content="{{ $token }}" name="csrf-token">
     <!--favicon-->
     <link href="{{ asset('admin') }}/assets/images/favicon-32x32.png" rel="icon" type="image/png" />
     <!--plugins-->
@@ -32,6 +45,10 @@
 
 
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+    {{-- chart --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {{-- chart --}}
     @yield('style')
     @stack('style')
     <title>POINT OF SALES - FRUIT STORE</title>

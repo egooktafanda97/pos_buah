@@ -109,6 +109,24 @@
             </a>
         </li>
     @endrole
+
+    <li class="menu-label">LAPORAN</li>
+    <li>
+        <a href="/laporanbarangmasuk">
+            <div class="parent-icon"><i class='bx bx-note'></i>
+            </div>
+            <div class="menu-title">BARANG MASUK</div>
+        </a>
+    </li>
+    <li>
+        <a href="/laporanbarangkeluar">
+            <div class="parent-icon"><i class='bx bx-note'></i>
+            </div>
+            <div class="menu-title">BARANG KELUAR</div>
+        </a>
+    </li>
+
+
     <li class="menu-label">AUTH</li>
     <li>
         <a href="/logout">
