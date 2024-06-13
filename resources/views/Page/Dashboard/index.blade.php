@@ -61,7 +61,7 @@
                                     <p class="mb-0 font-13"></p>
                                 </div>
                                 <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto">
-                                    <i class='bx bxs-package'></i>
+                                    <i class='bx bx-money'></i>
                                 </div>
                             </div>
                         </div>
@@ -76,89 +76,100 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <h6 class="mb-0">Penjualan</h6>
+                                    <h6 class="mb-0">Penjualan Bulanan Tahun {{ Carbon\Carbon::now()->year }}</h6>
                                 </div>
                             </div>
 
-                            <div class="chart-container-1">
-                                <canvas id="salesChart"></canvas>
+                            <div class="chart-container">
+                                <canvas id="chartSales"></canvas>
                             </div>
 
-                            @isset($dailySales)
-                                <p>Total Penjualan Bulan Ini: Rp {{ number_format($totalPenjualanBulanan, 0, ',', '.') }}</p>
-                            </div>
                         </div>
                     </div>
                 </div>
-                <!--end row-->
             </div>
         </div>
-    @endsection
-@section('script')
+    </div>
+@endsection
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        var dailySales = @json($dailySales);
-        var labels = Object.keys(dailySales);
-        var data = Object.values(dailySales);
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('{{ route('totalpenjualanchart') }}')
+                .then(response => response.json())
+                .then(data => {
+                    var ctx = document.getElementById('chartSales').getContext('2d');
 
-        var ctx = document.getElementById('salesChart').getContext('2d');
+                    var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
+                    gradientStroke1.addColorStop(0, '#6078ea');
+                    gradientStroke1.addColorStop(1, '#17c5ea');
 
-        var salesChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Total Sales',
-                    data: data,
-                    borderColor: '#6078ea',
-                    backgroundColor: 'rgba(96, 120, 234, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#6078ea',
-                    pointBorderColor: '#ffffff',
-                    pointHoverRadius: 6,
-                    pointHoverBackgroundColor: '#6078ea',
-                    pointHoverBorderColor: '#ffffff',
-                    pointHitRadius: 10,
-                    pointBorderWidth: 2,
-                    lineTension: 0.4
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                legend: {
-                    display: false
-                },
-                scales: {
-                    xAxes: [{
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Date'
-                        }
-                    }],
-                    yAxes: [{
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Total Sales'
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Penjualan Bulanan',
+                                data: data.data,
+                                borderColor: gradientStroke1,
+                                backgroundColor: gradientStroke1,
+                                pointBackgroundColor: '#fff',
+                                pointBorderColor: gradientStroke1,
+                                pointHoverBackgroundColor: gradientStroke1,
+                                pointHoverBorderColor: gradientStroke1,
+                                borderWidth: 10,
+                                pointRadius: 7,
+                                fill: false,
+                            }]
                         },
-                        ticks: {
-                            beginAtZero: true,
-                            callback: function(value) {
-                                return 'Rp ' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        options: {
+                            maintainAspectRatio: false,
+                            legend: {
+                                display: true,
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 8
+                                }
+                            },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        autoSkip: false,
+                                        maxRotation: 0,
+                                        callback: function(value, index, values) {
+                                            return value;
+                                        }
+                                    }
+                                }],
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        callback: function(value, index, values) {
+                                            return 'Rp ' + value
+                                                .toLocaleString();
+                                        }
+                                    }
+                                }]
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function(tooltipItem, data) {
+                                        var value = data.datasets[tooltipItem.datasetIndex].data[
+                                            tooltipItem.index];
+                                        return 'Rp ' + value
+                                            .toLocaleString();
+                                    }
+                                }
                             }
                         }
-                    }]
-                },
-                tooltips: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return 'Rp ' + tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                        }
-                    }
-                }
-            }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         });
     </script>
-@else
-    <p>Data transaksi tidak tersedia untuk bulan ini.</p>
-@endisset
-@endsection
+@endpush

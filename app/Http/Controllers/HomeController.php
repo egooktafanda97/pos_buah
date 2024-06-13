@@ -61,31 +61,24 @@ class HomeController extends Controller
     // CHART
     public function totalpenjualanchart()
     {
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
+        $data_penjualan = Transaksi::selectRaw('MONTH(created_at) as bulan, SUM(total_belanja) as total_bulan')
+        ->whereYear('created_at', Carbon::now()->year)
+        ->groupBy('bulan')
+        ->orderBy('bulan')
+        ->get();
 
-        $transactions = Transaksi::whereMonth('tanggal', $currentMonth)
-                                  ->whereYear('tanggal', $currentYear)
-                                  ->get();
+    $labels = [];
+    $data = [];
 
-        $dailySales = [];
-        $totalPenjualanBulanan = 0;
-
-        if ($transactions->count() > 0) {
-            foreach ($transactions as $transaction) {
-                $day = date('d', strtotime($transaction->tanggal));
-
-                if (!isset($dailySales[$day])) {
-                    $dailySales[$day] = 0;
-                }
-
-                $dailySales[$day] += $transaction->total_belanja;
-                $totalPenjualanBulanan += $transaction->total_belanja;
-            }
-
-            ksort($dailySales);
-        }
-
-        return view('Page.Dashboard.index', compact('dailySales', 'totalPenjualanBulanan'));
+    foreach ($data_penjualan as $item) {
+        $labels[] = Carbon::createFromFormat('!m', $item->bulan)->format('M'); 
+        $data[] = $item->total_bulan;
     }
+
+    return response()->json([
+        'labels' => $labels,
+        'data' => $data,
+    ]);
+    }
+    
 }

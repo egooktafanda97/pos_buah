@@ -27,3 +27,6 @@ Route::get('/laporanbarangmasuk', [LaporanController::class, 'laporanbarangmasuk
 Route::get('/laporanbarangmasuk/print', [LaporanController::class, 'printbarangmasuk'])->name('Laporan.printlaporanbarangmasuk');
 
 Route::get('/laporanbarangkeluar', [LaporanController::class, 'laporanbarangkeluar'])->name('Laporan.laporanbarangkeluar');
+
+
+Route::get('/totalpenjualanchart', [HomeController::class, 'totalpenjualanchart'])->name('totalpenjualanchart');
