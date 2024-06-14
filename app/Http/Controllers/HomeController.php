@@ -23,15 +23,21 @@ class HomeController extends Controller
     {
         $barangMasukCount = LogBarangMasuk::count();
         $pelangganCount = Pelanggan::count();
-        
+
         $transaksiTodayCount = DetailTransaksi::whereDate('created_at', Carbon::today())->count();
-    
+
         $pemasukanTodayCount = Transaksi::whereDate('tanggal', Carbon::today())
-                                        ->sum('total_belanja');
-    
+            ->sum('total_belanja');
+        $p = Transaksi::selectRaw('sum(total_belanja) as total_belanja, created_at')
+            ->whereMonth("created_at", Carbon::now()->month)
+            ->whereYear("created_at", Carbon::now()->year)
+            ->groupBy('created_at')
+            ->get();
+        return $p;
+
         return view('Page.Dashboard.index', compact('barangMasukCount', 'pelangganCount', 'transaksiTodayCount', 'pemasukanTodayCount'));
     }
-    
+
     #[Get("testpage")]
     public function testpage()
     {
@@ -65,8 +71,8 @@ class HomeController extends Controller
         $currentYear = Carbon::now()->year;
 
         $transactions = Transaksi::whereMonth('tanggal', $currentMonth)
-                                  ->whereYear('tanggal', $currentYear)
-                                  ->get();
+            ->whereYear('tanggal', $currentYear)
+            ->get();
 
         $dailySales = [];
         $totalPenjualanBulanan = 0;

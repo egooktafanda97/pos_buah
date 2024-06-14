@@ -84,17 +84,19 @@
                                 <canvas id="salesChart"></canvas>
                             </div>
 
-                            @isset($dailySales)
-                                <p>Total Penjualan Bulan Ini: Rp {{ number_format($totalPenjualanBulanan, 0, ',', '.') }}</p>
-                            </div>
+                            @if (!empty($dailySales))
+                                <p>Total Penjualan Bulan Ini: Rp {{ number_format($totalPenjualanBulanan, 0, ',', '.') }}
+                                </p>
+                            @endif
                         </div>
                     </div>
                 </div>
-                <!--end row-->
             </div>
+            <!--end row-->
         </div>
-    @endsection
-@section('script')
+    </div>
+@endsection
+@push('script')
     <script>
         var dailySales = @json($dailySales);
         var labels = Object.keys(dailySales);
@@ -158,7 +160,4 @@
             }
         });
     </script>
-@else
-    <p>Data transaksi tidak tersedia untuk bulan ini.</p>
-@endisset
-@endsection
+@endpush
