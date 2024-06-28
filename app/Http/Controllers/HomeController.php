@@ -33,7 +33,6 @@ class HomeController extends Controller
             ->whereYear("created_at", Carbon::now()->year)
             ->groupBy('created_at')
             ->get();
-        return $p;
 
         return view('Page.Dashboard.index', compact('barangMasukCount', 'pelangganCount', 'transaksiTodayCount', 'pemasukanTodayCount'));
     }
@@ -67,31 +66,34 @@ class HomeController extends Controller
     // CHART
     public function totalpenjualanchart()
     {
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
-
-        $transactions = Transaksi::whereMonth('tanggal', $currentMonth)
-            ->whereYear('tanggal', $currentYear)
+        // Query penjualan per bulan pada tahun ini
+        $data_penjualan = Transaksi::selectRaw('MONTH(created_at) as bulan, SUM(total_belanja) as total_bulan')
+            ->whereYear('created_at', Carbon::now()->year)
+            ->groupBy('bulan')
+            ->orderBy('bulan')
             ->get();
 
-        $dailySales = [];
-        $totalPenjualanBulanan = 0;
+        // Inisialisasi array untuk label dan data dengan nilai default
+        $labels = [];
+        $data = [];
 
-        if ($transactions->count() > 0) {
-            foreach ($transactions as $transaction) {
-                $day = date('d', strtotime($transaction->tanggal));
-
-                if (!isset($dailySales[$day])) {
-                    $dailySales[$day] = 0;
-                }
-
-                $dailySales[$day] += $transaction->total_belanja;
-                $totalPenjualanBulanan += $transaction->total_belanja;
-            }
-
-            ksort($dailySales);
+        // Buat array default dengan 12 bulan dari Januari sampai Desember
+        for ($i = 1; $i <= 12; $i++) {
+            $labels[] = Carbon::createFromFormat('!m', $i)->format('M');
+            $data[$i] = 0; // Inisialisasi nilai penjualan menjadi 0
         }
 
-        return view('Page.Dashboard.index', compact('dailySales', 'totalPenjualanBulanan'));
+        // Isi data penjualan yang tersedia dari hasil query
+        foreach ($data_penjualan as $item) {
+            $data[$item->bulan] = $item->total_bulan;
+        }
+
+        // Keluarkan data sebagai array untuk JavaScript
+        $data_values = array_values($data);
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data_values,
+        ]);
     }
 }
